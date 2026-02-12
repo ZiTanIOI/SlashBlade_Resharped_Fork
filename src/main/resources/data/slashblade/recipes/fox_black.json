@@ -1,0 +1,46 @@
+{
+  "type": "slashblade:shaped_blade",
+  "blade": "slashblade:fox_black",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_powder"
+    },
+    "C": {
+      "type": "slashblade:blade",
+      "item": "slashblade:slashblade",
+      "request": {
+        "enchantments": [
+          {
+            "id": "minecraft:smite"
+          }
+        ],
+        "name": "slashblade:ruby"
+      }
+    },
+    "E": {
+      "tag": "forge:obsidian"
+    },
+    "F": {
+      "tag": "forge:feathers"
+    },
+    "Q": {
+      "tag": "forge:storage_blocks/quartz"
+    },
+    "S": {
+      "item": "slashblade:proudsoul_crystal"
+    },
+    "W": {
+      "tag": "forge:crops/wheat"
+    }
+  },
+  "pattern": [
+    " EF",
+    "BCS",
+    "WQ "
+  ],
+  "result": {
+    "item": "slashblade:slashblade"
+  },
+  "show_notification": true
+}

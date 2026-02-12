@@ -1,0 +1,301 @@
+buildscript {
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7.+'
+    }
+}
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id "com.hypherionmc.modutils.modpublisher" version "2.1.6"
+}
+
+// Mixin
+apply plugin: 'org.spongepowered.mixin'
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = "SlashBladeResharped-1.19.2"
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+minecraft {
+    mappings channel: mapping_channel, version: mapping_version
+    copyIdeResources = true
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', mod_id
+
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+        }
+
+        server {
+            property 'forge.enabledGameTestNamespaces', mod_id
+
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+        }
+
+        gameTestServer {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        data {
+            workingDirectory project.file('run-data')
+
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        }
+    }
+}
+
+// Mixin
+mixin {
+    add(sourceSets.main, "slashblade.refmap.json")
+    config 'slashblade.mixins.json'
+    debug {
+        verbose = true
+        exportMixinAP = true
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            // 排除需要可选依赖的兼容性文件，以及1.19.2不兼容的文件
+            exclude '**/compat/playerAnim/**'
+            exclude '**/compat/emi/**'
+            exclude '**/event/client/AdvancementsRecipeRenderer.java'
+            exclude '**/event/handler/EntitySpawnEventHandler.java'
+            exclude '**/emi/**'
+            exclude '**/patchouli/**'
+            exclude '**/thetwilightforest/**'
+            exclude '**/mixin/client/compat/ar/**'
+            exclude '**/recipe/ProudsoulShapelessRecipe.java'
+            // exclude '**/SlashBladeCreativeGroup.java' // 不再排除，保留创造模式标签
+            exclude '**/util/CustomDamageSource.java'
+            // 排除编码问题的jp.nyatla.nymmd包
+            exclude '**/jp/nyatla/nymmd/**'
+        }
+    }
+}
+
+repositories {
+
+     flatDir {
+         dir 'libs'
+     }
+    maven {
+        name "KosmX's maven"
+        url 'https://maven.kosmx.dev/'
+    }
+
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+    
+        // Patchouli
+    maven { url = 'https://maven.blamejared.com' }
+
+    maven {
+        url "https://cursemaven.com"
+    }
+
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    //添加 Mixin 支持
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    compileOnly           "org.projectlombok:lombok:1.18.38"
+    annotationProcessor   "org.projectlombok:lombok:1.18.38"
+    
+    
+    
+    // 添加 JEI 依赖
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
+    
+    // 移除其他可选依赖
+    // runtimeOnly fg.deobf("curse.maven:configured-457570:5180900")
+    // runtimeOnly fg.deobf("curse.maven:nbtedit-reborn-678133:5984630")
+    // implementation fg.deobf("curse.maven:the-twilight-forest-227639:5468648")
+    // implementation fg.deobf("curse.maven:emi-580555:6098494")
+    // compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
+    // runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+    // compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77-FORGE")
+    // runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77-FORGE")
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version, forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_authors: mod_authors, mod_description: mod_description,
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+// Example for how to get properties into the manifest for reading at runtime.
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'Specification-Title'     : mod_id,
+                'Specification-Vendor'    : mod_authors,
+                'Specification-Version'   : '1', // We are version 1 of ourselves
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : mod_authors,
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+
+// This is the preferred method to reobfuscate your jar file
+    finalizedBy 'reobfJar'
+}
+
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:
+// tasks.named('publish').configure {
+//     dependsOn 'reobfJar'
+// }
+
+java {
+    // 编译源码文件，方便发布 maven
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            artifact jar
+        }
+    }
+
+    repositories {
+        maven {
+            url "file://${maven_loc}"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+publisher {
+    // Setup the required API keys. You only need to define the keys for
+    // the platforms you plan on uploading to
+    apiKeys {
+        // Modrinth Token
+        modrinth System.getenv("MODRINTH_TOKEN")
+        // Curseforge Token
+        curseforge System.getenv("CURSE_TOKEN")
+    }
+
+    // Enable Debug mode. When enabled, no files will actually be uploaded
+    // setDebug(true)
+
+    // Curseforge Project ID
+    setCurseID("1022428")
+
+    // Modrinth Project ID
+    setModrinthID("slashblade-resharped")
+
+    // Type of release. beta, alpha or release
+    setVersionType("release")
+
+    // Changelog. This can be a file, string, OR, gist/github url
+    // For example: markdown.md, or "This is my changelog"
+    // Or: https://raw.githubusercontent.com/hypherionmc/changelogs/changelog.md
+    // Or https://gist.githubusercontent.com/hypherionmc/92f825d3c9337964cc77c9c8c9bf65e6/raw/ceeaaee5b98c688a23398864fe480b84796a1651/test_gist.md
+    setChangelog("Changelog WIP...")
+
+    // Required for Modrinth/GitHub
+    setVersion("${project.version}")
+
+    // Fancy display name for the upload.
+    // Will default to the project version if not set
+    setDisplayName("[1.19.2] SlashBlade:Resharped - ${project.version}")
+
+    // The supported game versions
+    setGameVersions("1.19.2")
+
+    // The modloaders your upload supports.
+    // This can also be an Enum from ModLoader,
+    // like setLoaders(ModLoader.FABRIC, ModLoader.FORGE)
+    setLoaders("forge", "neoforge")
+
+    // The new Curseforge Environment tag. Optional
+    // Valid values are "server", "client" or "both"
+    // You can also use CurseEnvironment.BOTH, or CurseEnvironment.SERVER or CurseEnvironment.CLIENT
+    setCurseEnvironment("both")
+
+    // The file to be uploaded. This can be a file, task, or string.
+    // setArtifact("build/libs/mymod.jar")
+    // setArtifact(jar.getArchiveFile().get())
+    // If this is a task, the task specified will be executed before publishing
+    setArtifact(jar)
+
+    // Add supported java versions. Currently only used by CurseForge
+    setJavaVersions("Java 17", "Java 18", "Java 21", "Java 20", "Java 21")
+
+    // Safety check to check if the artifact contains a valid mod metadata entry,
+    // which could possibly mean that the jar is empty
+    setDisableEmptyJarCheck(true)
+
+    // Curse Dependencies
+    curseDepends {
+        // Optional dependency
+        optional 'playeranimator'
+
+        // Optional dependency
+        optional 'jei'
+
+        // Optional dependency
+        optional 'the-twilight-forest'
+    }
+
+    modrinthDepends {
+        // Optional dependency
+        optional 'playeranimator'
+        optional 'jei'
+    }
+
+}
