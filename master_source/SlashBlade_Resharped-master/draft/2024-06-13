@@ -1,0 +1,15 @@
+Inventory: [
+    {
+        Slot: 2b, 
+        ForgeCaps: {Parent: {Size: 2, Items: []}}, 
+        id: "immersiveengineering:shield", 
+        Count: 1b, 
+        tag: {
+            Damage: 0, "IE:Shader": 
+            {id: "immersiveengineering:shader", 
+                Count: 1b, 
+                tag: {shader_name: "immersiveengineering:enbypride"}
+            }
+        }
+    }
+]

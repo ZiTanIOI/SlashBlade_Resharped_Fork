@@ -1,0 +1,91 @@
+Dev has the following entity data: {Brain: {memories: {}}, HurtByTimestamp: 0, ForgeData: {sb_yrot_prev: 0.0f, sb.store.stepup: 0.6f, sb_yrot: 0.0f}, SleepTimer: 0s, Attributes: [{Base: 0.10000000149011612d, Name: "minecraft:generic.movement_speed"}, {Base: 1.0d, Name: "minecraft:generic.attack_damage"}, {Base: 0.0d, Name: "forge:step_height_addition"}, {Base: 3.0d, Name: "forge:entity_reach"}, {Base: 0.08d, Name: "forge:entity_gravity"}, {Base: 4.0d, Name: "minecraft:generic.attack_speed"}], Invulnerable: 0b, FallFlying: 0b, PortalCooldown: 0, AbsorptionAmount: 0.0f, abilities: {invulnerable: 1b, mayfly: 1b, instabuild: 1b, walkSpeed: 0.1f, mayBuild: 1b, flying: 0b, flySpeed: 0.05f}, FallDistance: 0.0f, recipeBook: {recipes: ["minecraft:crafting_table"], isBlastingFurnaceFilteringCraftable: 0b, isSmokerGuiOpen: 0b, isFilteringCraftable: 0b, toBeDisplayed: ["minecraft:crafting_table"], isFurnaceGuiOpen: 0b, isFurnaceFilteringCraftable: 0b, isGuiOpen: 0b, isSmokerFilteringCraftable: 0b, isBlastingFurnaceGuiOpen: 0b}, CanUpdate: 1b, DeathTime: 0s, XpSeed: 0, ForgeCaps: {"slashblade:mobeffect": {StunTimeout: -1L}, "slashblade:inputstate": {Command: 0}, "slashblade:concentration": {rawPoint: 0L, lastupdate: 0L}}, XpTotal: 0, UUID: [I; 940439953, -167562164, -1601161573, -1389718966], playerGameType: 1, SelectedItem: {ForgeCaps: {"slashblade:bladestate": {isSealed: 0b, isNoScabbard: 0b, translationKey: "item.slashblade.ex.tukumo", ComboRootAir: "standby", isDestructable: 0b, HasShield: 0b, SummonedSwordColor: -612157, lastActionTime: 0L, _onClick: 0b, fallDecreaseRate: 0.0f, currentCombo: "arts_rapid_slash", killCount: 0, isCharged: 0b, RepairCounter: 0, Damage: 0.0f, rarityType: 3b, ComboRoot: "standby", adjustXYZ: [0.0d, 0.0d, 0.0d], ModelName: "slashblade:model/named/agito.obj", lastPosHash: "", RangeAttackType: "none", isDefaultBewitched: 0b, AttackAmplifier: 0.0f, TargetEntity: 0, SpecialAttackType: "none", TextureName: "slashblade:model/named/a_tukumo.png", BladeUniqueId: [I; 203575747, -1315025593, -2044279517, 296245589], SummonedSwordColorInverse: 0b, isBroken: 0b, baseAttackModifier: 6.0f, StandbyRenderType: 0b}}, id: "slashblade:slashblade", Count: 1b, tag: {id: "slashblade:slashblade", Count: 1, tag: {ShareTag: {translationKey: "item.slashblade.ex.tukumo", isBroken: "false"}}, ShareTag: {translationKey: "item.slashblade.ex.tukumo", isNoScabbard: "false", isBroken: "false"}}}, seenCredits: 0b, Motion: [0.0d, -0.0784000015258789d, 0.0d], Health: 20.0f, foodSaturationLevel: 5.0f, Air: 300s, OnGround: 1b, Dimension: "minecraft:overworld", Rotation: [-0.30000004f, 0.0f], XpLevel: 0, warden_spawn_tracker: {warning_level: 0, ticks_since_last_warning: 303, cooldown_ticks: 0}, Score: 0, Pos: [5.5d, 87.0d, 1.5d], Fire: -20s, XpP: 0.0f, EnderItems: [], DataVersion: 3465, foodLevel: 20, foodExhaustionLevel: 0.0f, HurtTime: 0s, SelectedItemSlot: 0,
+
+Inventory: [{Slot: 0b,
+ForgeCaps: {
+"slashblade:bladestate":
+
+{
+isSealed: 0b,
+isNoScabbard: 0b,
+translationKey: "item.slashblade.ex.tukumo",
+ComboRootAir: "standby",
+isDestructable: 0b,
+HasShield: 0b,
+SummonedSwordColor: -612157,
+lastActionTime: 0L,
+_onClick: 0b,
+fallDecreaseRate: 0.0f,
+currentCombo: "arts_rapid_slash",
+killCount: 0,
+isCharged: 0b,
+RepairCounter: 0,
+Damage: 0.0f,
+rarityType: 3b,
+ComboRoot: "standby",
+adjustXYZ: [0.0d, 0.0d, 0.0d],
+ModelName: "slashblade:model/named/agito.obj",
+lastPosHash: "",
+isDefaultBewitched: 0b,
+AttackAmplifier: 0.0f,
+TargetEntity: 0,
+SpecialAttackType: "none",
+TextureName: "slashblade:model/named/a_tukumo.png",
+BladeUniqueId: [I; 203575747, -1315025593, -2044279517, 296245589],
+SummonedSwordColorInverse: 0b,
+isBroken: 0b,
+baseAttackModifier: 6.0f,
+StandbyRenderType: 0b
+}
+
+},
+id: "slashblade:slashblade", Count: 1b,
+tag: {
+id: "slashblade:slashblade", Count: 1, tag: {ShareTag: {translationKey: "item.slashblade.ex.tukumo", isBroken: "false"}},
+ShareTag: {translationKey: "item.slashblade.ex.tukumo", isNoScabbard: "false", isBroken: "false"}
+}
+}]
+
+, foodTickTimer: 0}
+
+{Brain: {memories: {}}, HurtByTimestamp: 0, ForgeData: {sb_yrot_prev: 0.0f, sb.store.stepup: 0.6f, sb_yrot: 0.0f}, SleepTimer: 0s, Attributes: [{Base: 3.0d, Name: "forge:entity_reach"}, {Base: 1.0d, Name: "minecraft:generic.attack_damage"}, {Base: 4.0d, Name: "minecraft:generic.attack_speed"}, {Base: 0.08d, Name: "forge:entity_gravity"}, {Base: 0.0d, Name: "forge:step_height_addition"}, {Base: 0.10000000149011612d, Name: "minecraft:generic.movement_speed"}], Invulnerable: 0b, FallFlying: 0b, PortalCooldown: 0, AbsorptionAmount: 0.0f, abilities: {invulnerable: 1b, mayfly: 1b, instabuild: 1b, walkSpeed: 0.1f, mayBuild: 1b, flying: 0b, flySpeed: 0.05f}, FallDistance: 0.0f, recipeBook: {recipes: ["minecraft:crafting_table"], isBlastingFurnaceFilteringCraftable: 0b, isSmokerGuiOpen: 0b, isFilteringCraftable: 0b, toBeDisplayed: ["minecraft:crafting_table"], isFurnaceGuiOpen: 0b, isGuiOpen: 0b, isFurnaceFilteringCraftable: 0b, isBlastingFurnaceGuiOpen: 0b, isSmokerFilteringCraftable: 0b}, CanUpdate: 1b, DeathTime: 0s, XpSeed: 0, ForgeCaps: {"slashblade:mobeffect": {StunTimeout: -1L}, "slashblade:inputstate": {Command: 0}, "slashblade:concentration": {rawPoint: 0L, lastupdate: 0L}}, XpTotal: 0, UUID: [I; 940439953, -167562164, -1601161573, -1389718966], playerGameType: 1, SelectedItem: {ForgeCaps: {"slashblade:bladestate": {isSealed: 0b, isNoScabbard: 0b, translationKey: "", ComboRootAir: "slashblade:standby_air", isDestructable: 0b, HasShield: 0b, SummonedSwordColor: -13421569, lastActionTime: 3079L, _onClick: 0b, fallDecreaseRate: 0.0f, currentCombo: "slashblade:none", killCount: 0, isCharged: 0b, RepairCounter: 0, Damage: 0.0f, rarityType: 0b, ComboRoot: "slashblade:standby_air", adjustXYZ: [0.0d, 0.0d, 0.0d], lastPosHash: "", isDefaultBewitched: 0b, AttackAmplifier: 0.0f, TargetEntity: -1, SpecialAttackType: "slashblade:judgement_cut", BladeUniqueId: [I; -1120176675, -1743499960, -1992695937, -1564169139], SummonedSwordColorInverse: 0b, isBroken: 0b, baseAttackModifier: 0.0f, StandbyRenderType: 0b}}, id: "slashblade:slashblade", Count: 1b, tag: {ShareTag: {translationKey: "", isNoScabbard: "false", isBroken: "false"}}}, seenCredits: 0b, Motion: [0.0d, -0.0784000015258789d, 0.0d], Health: 20.0f, foodSaturationLevel: 5.0f, Air: 300s, OnGround: 1b, Dimension: "minecraft:overworld", Rotation: [-161.40012f, 19.199965f], XpLevel: 0, warden_spawn_tracker: {warning_level: 0, ticks_since_last_warning: 3240, cooldown_ticks: 0}, Score: 0, Pos: [-1.714613161711136d, 80.0d, 13.065171456551074d], Fire: -20s, XpP: 0.0f, EnderItems: [], DataVersion: 3465, foodLevel: 20, foodExhaustionLevel: 0.0f, HurtTime: 0s, SelectedItemSlot: 0, Inventory: [{Slot: 0b, ForgeCaps: {"slashblade:bladestate": {isSealed: 0b, isNoScabbard: 0b, translationKey: "", ComboRootAir: "slashblade:standby_air", isDestructable: 0b, HasShield: 0b, SummonedSwordColor: -13421569, lastActionTime: 3079L, _onClick: 0b, fallDecreaseRate: 0.0f, currentCombo: "slashblade:none", killCount: 0, isCharged: 0b, RepairCounter: 0, Damage: 0.0f, rarityType: 0b, ComboRoot: "slashblade:standby_air", adjustXYZ: [0.0d, 0.0d, 0.0d], lastPosHash: "", isDefaultBewitched: 0b, AttackAmplifier: 0.0f, TargetEntity: -1, SpecialAttackType: "slashblade:judgement_cut", BladeUniqueId: [I; -1120176675, -1743499960, -1992695937, -1564169139], SummonedSwordColorInverse: 0b, isBroken: 0b, baseAttackModifier: 0.0f, StandbyRenderType: 0b}}, id: "slashblade:slashblade", Count: 1b, tag: {ShareTag: {translationKey: "", isNoScabbard: "false", isBroken: "false"}}}], foodTickTimer: 0}
+
+
+Inventory: [{Slot: 0b,
+ForgeCaps: {
+"slashblade:bladestate":
+{
+isSealed: 0b,
+isNoScabbard: 0b,
+translationKey: "item.slashblade.ex.tukumo",
+ComboRootAir: "standby",
+isDestructable: 0b,
+HasShield: 0b,
+SummonedSwordColor: -612157,
+lastActionTime: 1265L,
+_onClick: 0b,
+fallDecreaseRate: 0.0f,
+currentCombo: "ex_aerial_rave_b4_end",
+killCount: 4,
+isCharged: 0b,
+RepairCounter: 0,
+Damage: 0.0f,
+rarityType: 3b,
+ComboRoot: "standby",
+adjustXYZ: [0.0d, 0.0d, 0.0d],
+ModelName: "slashblade:model/named/agito.obj",
+lastPosHash: "",
+RangeAttackType: "none",
+isDefaultBewitched: 0b,
+AttackAmplifier: 0.0f,
+TargetEntity: -1,
+SpecialAttackType: "none",
+TextureName: "slashblade:model/named/a_tukumo.png",
+BladeUniqueId: [I; 203575747, -1315025593, -2044279517, 296245589],
+SummonedSwordColorInverse: 0b,
+isBroken: 0b,
+baseAttackModifier: 6.0f,
+StandbyRenderType: 0b
+}
+
+},
+id: "slashblade:slashblade", Count: 1b, tag: {id: "slashblade:slashblade", Count: 1, tag: {ShareTag: {translationKey: "item.slashblade.ex.tukumo", isBroken: "false"}}, ShareTag: {translationKey: "item.slashblade.ex.tukumo", isNoScabbard: "false", isBroken: "false"}}}]

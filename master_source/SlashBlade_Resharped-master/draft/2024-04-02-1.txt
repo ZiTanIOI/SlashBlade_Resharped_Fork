@@ -1,0 +1,7 @@
+this.vertex((double)p_85955_, (double)p_85956_, (double)p_85957_);
+this.color(p_85958_, p_85959_, p_85960_, p_85961_);
+this.uv(p_85962_, p_85963_);
+this.overlayCoords(p_85964_);
+this.uv2(p_85965_);
+this.normal(p_85966_, p_85967_, p_85968_);
+this.endVertex();
