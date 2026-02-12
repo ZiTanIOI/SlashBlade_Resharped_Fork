@@ -1,7 +1,7 @@
 package mods.flammpfeil.slashblade.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import mods.flammpfeil.slashblade.SlashBlade;
 import mods.flammpfeil.slashblade.client.renderer.model.BladeModelManager;
 import mods.flammpfeil.slashblade.client.renderer.model.obj.WavefrontObject;
@@ -45,13 +45,13 @@ public class DriveRenderer<T extends EntityDrive> extends EntityRenderer<T> {
             baseAlpha = Math.max(0, -Math.pow(baseAlpha - 1, 4.0) + 0.75);
 
             matrixStack.mulPose(
-                    new Quaternion(0, 0, 1, (float) Math.toRadians(Mth.rotLerp(partialTicks, entity.yRotO, entity.getYRot())) - 90.0F));
-            matrixStack.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(Mth.rotLerp(partialTicks, entity.xRotO, entity.getXRot()))));
-            matrixStack.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(entity.getRotationRoll())));
+                    Vector3f.YP.rotationDegrees(Mth.rotLerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(partialTicks, entity.xRotO, entity.getXRot())));
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(entity.getRotationRoll()));
 
             float scale = 0.015f;
             matrixStack.scale(scale, scale, scale);
-            matrixStack.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(90.0F)));
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
             int color = entity.getColor() & 0xFFFFFF;
             int alpha = ((0xFF & (int) (0xFF * baseAlpha)) << 24);
             WavefrontObject model = BladeModelManager.getInstance().getModel(MODEL);

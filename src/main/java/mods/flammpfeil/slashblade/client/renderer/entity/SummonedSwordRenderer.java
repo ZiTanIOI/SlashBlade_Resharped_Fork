@@ -1,7 +1,7 @@
 package mods.flammpfeil.slashblade.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import mods.flammpfeil.slashblade.client.renderer.model.BladeModelManager;
 import mods.flammpfeil.slashblade.client.renderer.model.obj.WavefrontObject;
 import mods.flammpfeil.slashblade.client.renderer.util.BladeRenderState;
@@ -39,20 +39,21 @@ public class SummonedSwordRenderer<T extends EntityAbstractSummonedSword> extend
             boolean hasHitEntity = hits != null;
 
             if (hasHitEntity) {
-                matrixStack.mulPose(new Quaternion(0, -180, 0, true));
-                matrixStack.mulPose(new Quaternion(0, 0, 1, -90));
+                matrixStack
+                        .mulPose(Vector3f.YN.rotationDegrees(Mth.rotLerp(partialTicks, hits.yRotO, hits.getYRot()) - 90));
+                matrixStack.mulPose(Vector3f.YN.rotationDegrees(entity.getOffsetYaw()));
             } else {
                 matrixStack.mulPose(
-                        new Quaternion(0, 0, 1, (float) Math.toRadians(Mth.rotLerp(partialTicks, entity.yRotO, entity.getYRot())) - 90.0F));
+                        Vector3f.YP.rotationDegrees(Mth.rotLerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
             }
 
-            matrixStack.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(Mth.rotLerp(partialTicks, entity.xRotO, entity.getXRot()))));
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(partialTicks, entity.xRotO, entity.getXRot())));
 
-            matrixStack.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(entity.getRoll())));
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(entity.getRoll()));
 
             float scale = 0.0075f;
             matrixStack.scale(scale, scale, scale);
-            matrixStack.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(90.0F)));
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
 
             if (hasHitEntity) {
                 matrixStack.translate(0, 0, -100);
