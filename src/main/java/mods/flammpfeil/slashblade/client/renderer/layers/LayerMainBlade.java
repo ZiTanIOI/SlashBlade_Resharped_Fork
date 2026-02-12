@@ -178,6 +178,9 @@ public class LayerMainBlade<T extends LivingEntity, M extends EntityModel<T>> ex
                 return;
             }
 
+            double modelScaleBase = 0.0078125F; // 0.5^7
+            double motionScale = 1.5 / 12.0;
+            
             String part;
             if (s.isBroken()) {
                 part = "blade_damaged";
@@ -189,25 +192,58 @@ public class LayerMainBlade<T extends LivingEntity, M extends EntityModel<T>> ex
             WavefrontObject obj = BladeModelManager.getInstance()
                     .getModel(s.getModel().orElse(DefaultResources.resourceDefaultModel));
 
-            // 正确使用玩家模型的手骨位置渲染刀
             try (MSAutoCloser msacA = MSAutoCloser.pushMatrix(matrixStack)) {
-                // 1.19.2版本兼容：直接设置手部位置偏移
-                // 计算手部位置，考虑玩家姿势
-                double handX = entity.getMainHandItem() == stack ? 0.08 : 0.0;
-                double handY = 0.45;
-                double handZ = -0.15;
+                // minecraft model neckPoint height = 1.5f
+                // mmd model neckPoint height = 12.0f
+                matrixStack.translate(0, 1.5f, 0);
                 
-                // 设置刀的位置和旋转
-                matrixStack.translate(handX, handY, handZ);
-                matrixStack.mulPose(Vector3f.XP.rotationDegrees(180));
-                matrixStack.mulPose(Vector3f.YP.rotationDegrees(180));
+                // 获取刀的携带类型
+                var carrytype = s.getCarryType();
                 
-                float modelScale = 0.015625F; // 1/64 缩放，修复模型过小问题
+                // 根据携带类型设置位置和旋转
+                switch (carrytype) {
+                    case PSO2:
+                        matrixStack.translate(1F, -1.125f, 0.20f);
+                        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(-7));
+                        break;
+
+                    case KATANA:
+                        matrixStack.translate(0.25F, -0.875f, -0.55f);
+                        matrixStack.mulPose(Vector3f.XP.rotationDegrees(180));
+                        matrixStack.mulPose(Vector3f.YP.rotationDegrees(90));
+                        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(15));
+                        break;
+
+                    case DEFAULT:
+                        matrixStack.translate(0.25F, -0.875f, -0.55f);
+                        matrixStack.mulPose(Vector3f.YP.rotationDegrees(90));
+                        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(15));
+                        break;
+
+                    case NINJA:
+                        matrixStack.translate(-0.5F, -2f, 0.20f);
+                        matrixStack.mulPose(Vector3f.XP.rotationDegrees(-120));
+                        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180));
+                        break;
+
+                    case RNINJA:
+                        matrixStack.translate(0.5F, -2f, 0.20f);
+                        matrixStack.mulPose(Vector3f.XP.rotationDegrees(-60));
+                        break;
+
+                    default:
+                        return;
+                }
+                
+                // 应用正确的缩放
+                float modelScale = (float) (modelScaleBase * (1.0f / motionScale));
+                matrixStack.scale((float) motionScale, (float) motionScale, (float) motionScale);
                 matrixStack.scale(modelScale, modelScale, modelScale);
                 
                 // 渲染刀身
                 BladeRenderState.renderOverrided(stack, obj, part, textureLocation, matrixStack, bufferIn, lightIn);
                 BladeRenderState.renderOverridedLuminous(stack, obj, part + "_luminous", textureLocation, matrixStack, bufferIn, lightIn);
+                
                 // 渲染刀鞘
                 BladeRenderState.renderOverrided(stack, obj, "sheath", textureLocation, matrixStack, bufferIn, lightIn);
                 BladeRenderState.renderOverridedLuminous(stack, obj, "sheath_luminous", textureLocation, matrixStack, bufferIn, lightIn);

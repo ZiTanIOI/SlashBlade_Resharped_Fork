@@ -1,7 +1,7 @@
 package mods.flammpfeil.slashblade.event.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import mods.flammpfeil.slashblade.item.ItemSlashBlade;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -55,13 +55,13 @@ public class UserPoseOverrider {
         float partialTicks = event.getPartialTick();
 
         float f = Mth.rotLerp(partialTicks, entityLiving.yBodyRotO, entityLiving.yBodyRot);
-        matrixStackIn.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(180.0F - f)));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F - f));
         anotherPoseRotP(matrixStackIn, entityLiving, partialTicks);
 
-        matrixStackIn.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(Mth.rotLerp(partialTicks, rot, rotPrev))));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.rotLerp(partialTicks, rot, rotPrev)));
 
         anotherPoseRotN(matrixStackIn, entityLiving, partialTicks);
-        matrixStackIn.mulPose(new Quaternion(0, -180, 0, true));
+        matrixStackIn.mulPose(Vector3f.YN.rotationDegrees(180.0F - f));
     }
 
     static public void anotherPoseRotP(PoseStack matrixStackIn, LivingEntity entityLiving, float partialTicks) {
@@ -73,7 +73,7 @@ public class UserPoseOverrider {
             float f1 = (float) entityLiving.getFallFlyingTicks() + partialTicks;
             float f2 = Mth.clamp(f1 * f1 / 100.0F, 0.0F, 1.0F);
             if (!entityLiving.isAutoSpinAttack()) {
-                matrixStackIn.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(np * f2 * (-90.0F - entityLiving.getXRot()))));
+                matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(np * f2 * (-90.0F - entityLiving.getXRot())));
             }
 
             Vec3 vector3d = entityLiving.getViewVector(partialTicks);
@@ -83,12 +83,12 @@ public class UserPoseOverrider {
             if (d0 > 0.0D && d1 > 0.0D) {
                 double d2 = (vector3d1.x * vector3d.x + vector3d1.z * vector3d.z) / Math.sqrt(d0 * d1);
                 double d3 = vector3d1.x * vector3d.z - vector3d1.z * vector3d.x;
-                matrixStackIn.mulPose(new Quaternion(0, (float) (np * Math.signum(d3) * Math.acos(d2)), 0, true));
+                matrixStackIn.mulPose(Vector3f.YP.rotation((float) (np * Math.signum(d3) * Math.acos(d2))));
             }
         } else if (f > 0.0F) {
             float f3 = entityLiving.isInWater() ? -90.0F - entityLiving.getXRot() : -90.0F;
             float f4 = Mth.lerp(f, 0.0F, f3);
-            matrixStackIn.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(np * f4)));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(np * f4));
             if (entityLiving.isVisuallySwimming()) {
                 matrixStackIn.translate(0.0D, np * -1.0D, (double) np * 0.3F);
             }
@@ -108,13 +108,13 @@ public class UserPoseOverrider {
             if (d0 > 0.0D && d1 > 0.0D) {
                 double d2 = (vector3d1.x * vector3d.x + vector3d1.z * vector3d.z) / Math.sqrt(d0 * d1);
                 double d3 = vector3d1.x * vector3d.z - vector3d1.z * vector3d.x;
-                matrixStackIn.mulPose(new Quaternion(0, (float) (np * Math.signum(d3) * Math.acos(d2)), 0, true));
+                matrixStackIn.mulPose(Vector3f.YP.rotation((float) (np * Math.signum(d3) * Math.acos(d2))));
             }
 
             float f1 = (float) entityLiving.getFallFlyingTicks() + partialTicks;
             float f2 = Mth.clamp(f1 * f1 / 100.0F, 0.0F, 1.0F);
             if (!entityLiving.isAutoSpinAttack()) {
-                matrixStackIn.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(np * f2 * (-90.0F - entityLiving.getXRot()))));
+                matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(np * f2 * (-90.0F - entityLiving.getXRot())));
             }
         } else if (f > 0.0F) {
             if (entityLiving.isVisuallySwimming()) {
@@ -123,7 +123,7 @@ public class UserPoseOverrider {
 
             float f3 = entityLiving.isInWater() ? -90.0F - entityLiving.getXRot() : -90.0F;
             float f4 = Mth.lerp(f, 0.0F, f3);
-            matrixStackIn.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(np * f4)));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(np * f4));
         }
     }
 
@@ -149,7 +149,7 @@ public class UserPoseOverrider {
     static public void invertRot(PoseStack matrixStack, Entity entity, float partialTicks) {
         float rot = entity.getPersistentData().getFloat(TAG_ROT);
         float rotPrev = entity.getPersistentData().getFloat(TAG_ROT_PREV);
-        matrixStack.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(Mth.rotLerp(partialTicks, rot, rotPrev))));
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees(Mth.rotLerp(partialTicks, rot, rotPrev)));
     }
 }
 

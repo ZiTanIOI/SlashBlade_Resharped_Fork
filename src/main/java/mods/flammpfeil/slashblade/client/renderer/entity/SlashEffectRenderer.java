@@ -1,7 +1,7 @@
 package mods.flammpfeil.slashblade.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import mods.flammpfeil.slashblade.SlashBlade;
 import mods.flammpfeil.slashblade.capability.concentrationrank.IConcentrationRank.ConcentrationRanks;
 import mods.flammpfeil.slashblade.client.renderer.model.BladeModelManager;
@@ -44,9 +44,9 @@ public class SlashEffectRenderer<T extends EntitySlashEffect> extends EntityRend
         try (MSAutoCloser msac = MSAutoCloser.pushMatrix(matrixStackIn)) {
 
             matrixStackIn
-                    .mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(-Mth.lerp(partialTicks, entity.yRotO, entity.getYRot())) - 90.0F));
-            matrixStackIn.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()))));
-            matrixStackIn.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(entity.getRotationRoll())));
+                    .mulPose(Vector3f.YP.rotationDegrees(-Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
+            matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(entity.getRotationRoll()));
 
             WavefrontObject model = BladeModelManager.getInstance().getModel(modelLocation);
 
@@ -65,7 +65,7 @@ public class SlashEffectRenderer<T extends EntitySlashEffect> extends EntityRend
             // baseAlpha = Math.sin(Math.PI * progress);
 
             // time
-            matrixStackIn.mulPose(new Quaternion(0, 0, 1, (float) Math.toRadians(entity.getRotationOffset()) - 135.0F * progress));
+            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(entity.getRotationOffset() - 135.0F * progress));
 
             matrixStackIn.scale(1, 0.25f, 1);
 
