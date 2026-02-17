@@ -7,7 +7,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import java.util.Map;
 
 public class EnchantmentsHelper {
-    //判断A是否含有B的附�?
+    //判断A是否含有B的附魔
     public static boolean hasEnchantmentsMatch(ItemStack stackA, ItemStack stackB) {
         Map<Enchantment, Integer> enchantmentsB = EnchantmentHelper.getEnchantments(stackB);
 
@@ -30,9 +30,3 @@ public class EnchantmentsHelper {
         return true;
     }
 }
-
-
-
-
-
-

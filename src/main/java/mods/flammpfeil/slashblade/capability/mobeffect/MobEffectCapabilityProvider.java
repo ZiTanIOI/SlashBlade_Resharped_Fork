@@ -40,9 +40,3 @@ public class MobEffectCapabilityProvider implements ICapabilityProvider, INBTSer
         state.ifPresent(instance -> NBTHelper.getNBTCoupler(nbt).get("StunTimeout", instance::setStunTimeOut));
     }
 }
-
-
-
-
-
-

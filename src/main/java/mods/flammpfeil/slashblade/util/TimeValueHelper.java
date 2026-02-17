@@ -40,9 +40,3 @@ public class TimeValueHelper {
         return (frames * FramesToTicks);
     }
 }
-
-
-
-
-
-

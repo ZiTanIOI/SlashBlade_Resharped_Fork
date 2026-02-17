@@ -41,19 +41,19 @@ import jp.nyatla.nymmd.core.PmdBone;
 
 public class MotionData {
     public String szBoneName; // ボーン名
-    public int ulNumKeyFrames; // キーフレーム�?
-    public BoneKeyFrame[] pKeyFrames; // キーフレームデータ配�?
+    public int ulNumKeyFrames; // キーフレーム数
+    public BoneKeyFrame[] pKeyFrames; // キーフレームデータ配列
 
     /**
      * 
      * @param fFrame
-     * @param i_pmd_bone 出力先オブジェク�?
+     * @param i_pmd_bone 出力先オブジェクト
      */
     public void getMotionPosRot(float fFrame, PmdBone i_pmd_bone) {
         int ulNumKeyFrame = this.ulNumKeyFrames;
         BoneKeyFrame[] bone_key_frame = this.pKeyFrames;
 
-        // 最終フレームを過ぎていた場�?
+        // 最終フレームを過ぎていた場合
         if (fFrame > bone_key_frame[ulNumKeyFrame - 1].fFrameNo) {
             fFrame = bone_key_frame[ulNumKeyFrame - 1].fFrameNo;
         }
@@ -87,7 +87,7 @@ public class MotionData {
     }
 
     /**
-     * @author やねうら�?さん
+     * @author やねうらお さん
      * @param pKeyFrames
      * @param fFrame
      * @param start
@@ -97,7 +97,7 @@ public class MotionData {
     private static int findByBinarySearch(BoneKeyFrame[] pKeyFrames, float fFrame, int start, int end) {
         int diff = end - start;
         if (diff < 8) {
-            // ある程度小さくなったら逐次サーチ。このな かに見つかるはずなんだ�?
+            // ある程度小さくなったら逐次サーチ。このな かに見つかるはずなんだ。
             for (int i = start; i < end; i++) {
                 if (fFrame < pKeyFrames[i].fFrameNo) {
                     return i;
@@ -106,7 +106,7 @@ public class MotionData {
             return end;
         }
 
-        // 再帰的に調べ�?
+        // 再帰的に調べる
         int mid = (start + end) / 2;
         if (fFrame < pKeyFrames[mid].fFrameNo) {
             return findByBinarySearch(pKeyFrames, fFrame, start, mid);
@@ -115,9 +115,3 @@ public class MotionData {
         }
     }
 }
-
-
-
-
-
-

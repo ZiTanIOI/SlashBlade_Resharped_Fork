@@ -1,6 +1,7 @@
 package mods.flammpfeil.slashblade;
 
 import com.google.common.base.CaseFormat;
+import com.mojang.serialization.Lifecycle;
 import mods.flammpfeil.slashblade.ability.*;
 import mods.flammpfeil.slashblade.advancement.SlashBladeItemPredicate;
 import mods.flammpfeil.slashblade.capability.concentrationrank.CapabilityConcentrationRank;
@@ -25,6 +26,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
@@ -54,6 +56,8 @@ import org.apache.logging.log4j.Logger;
 @Mod(SlashBlade.MODID)
 public class SlashBlade {
     public static final String MODID = "slashblade";
+    private static Registry<SlashBladeDefinition> fallbackSlashBladeRegistry;
+    private static int fallbackSlashBladeRegistrySize = -1;
 
     public static ResourceLocation prefix(String path) {
         return new ResourceLocation(SlashBlade.MODID, path);
@@ -430,9 +434,33 @@ public class SlashBlade {
 
     public static Registry<SlashBladeDefinition> getSlashBladeDefinitionRegistry(Level level) {
         if (level.isClientSide()) {
-            return BladeModelManager.getClientSlashBladeRegistry();
+            Registry<SlashBladeDefinition> registry = BladeModelManager.getClientSlashBladeRegistry();
+            if (registry != null) {
+                return registry;
+            }
         }
-        return level.registryAccess().registryOrThrow(SlashBladeDefinition.REGISTRY_KEY);
+        Registry<SlashBladeDefinition> registry = level.registryAccess().registry(SlashBladeDefinition.REGISTRY_KEY)
+                .orElse(null);
+        if (registry != null) {
+            return registry;
+        }
+        return getFallbackSlashBladeDefinitionRegistry();
+    }
+
+    private static Registry<SlashBladeDefinition> getFallbackSlashBladeDefinitionRegistry() {
+        int size = SlashBladeRegistryHandler.getCachedBladeDefinitions().size();
+        if (fallbackSlashBladeRegistry == null || fallbackSlashBladeRegistrySize != size) {
+            MappedRegistry<SlashBladeDefinition> mapped = new MappedRegistry<>(
+                    SlashBladeDefinition.REGISTRY_KEY,
+                    Lifecycle.stable(),
+                    null
+            );
+            SlashBladeRegistryHandler.getCachedBladeDefinitions().forEach((key, value) ->
+                    mapped.register(key, value, Lifecycle.stable()));
+            fallbackSlashBladeRegistry = mapped.freeze();
+            fallbackSlashBladeRegistrySize = size;
+        }
+        return fallbackSlashBladeRegistry;
     }
 
     // �?.19.2中，移除HolderLookup.Provider的使�?
@@ -440,9 +468,3 @@ public class SlashBlade {
     //     return access.lookupOrThrow(SlashBladeDefinition.REGISTRY_KEY);
     // }
 }
-
-
-
-
-
-

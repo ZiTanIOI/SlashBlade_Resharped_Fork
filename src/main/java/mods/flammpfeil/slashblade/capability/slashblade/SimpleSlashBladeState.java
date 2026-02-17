@@ -93,9 +93,3 @@ public class SimpleSlashBladeState extends SlashBladeState {
         this.damage = damage;
     }
 }
-
-
-
-
-
-

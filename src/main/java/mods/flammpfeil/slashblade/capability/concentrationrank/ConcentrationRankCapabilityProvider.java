@@ -42,9 +42,3 @@ public class ConcentrationRankCapabilityProvider implements ICapabilityProvider,
                 .get("rawPoint", instance::setRawRankPoint).get("lastupdate", instance::setLastUpdte));
     }
 }
-
-
-
-
-
-

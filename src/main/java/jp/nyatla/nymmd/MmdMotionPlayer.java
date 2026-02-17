@@ -83,7 +83,7 @@ public abstract class MmdMotionPlayer {
          */
     }
 
-    private PmdBone m_pNeckBone; // 首のボー�?
+    private PmdBone m_pNeckBone; // 首のボーン
 
     public MmdMotionPlayer() {
         return;
@@ -98,19 +98,19 @@ public abstract class MmdMotionPlayer {
         boneNameToIndex.clear();
         IntStream.range(0, bone_array.length).forEach(value -> boneNameToIndex.put(bone_array[value].getName(), value));
 
-        // 首^H頭のボーンを探してお�?
+        // 首^H頭のボーンを探しておく
         this.m_pNeckBone = null;
-        Integer headIdx = boneNameToIndex.get("�?);
+        Integer headIdx = boneNameToIndex.get("頭");
         if (headIdx != null) {
             this.m_pNeckBone = bone_array[headIdx];
         }
         /*
          * for(int i=0;i<bone_array.length;i++){
-         * if(bone_array[i].getName().equals("�?)){ this.m_pNeckBone = bone_array[i];
+         * if(bone_array[i].getName().equals("頭")){ this.m_pNeckBone = bone_array[i];
          * break; } }
          */
 
-        // PMD/VMDが揃った�?
+        // PMD/VMDが揃った？
         if (this._ref_vmd_motion != null) {
             makeBoneFaceList();
         }
@@ -124,13 +124,13 @@ public abstract class MmdMotionPlayer {
         }
 
         this._ref_vmd_motion = i_vmd_model;
-        // 操作対象ボーンのポインタを設定す�?
+        // 操作対象ボーンのポインタを設定する
         MotionData[] pMotionDataList = i_vmd_model.refMotionDataArray();
         this.m_ppBoneList = new PmdBone[pMotionDataList.length];
         // 操作対象表情のポインタを設定する
         FaceData[] pFaceDataList = i_vmd_model.refFaceDataArray();
         this.m_ppFaceList = new PmdFace[pFaceDataList.length];
-        // PMD/VMDが揃った�?
+        // PMD/VMDが揃った？
         if (this._ref_pmd_model != null) {
             makeBoneFaceList();
         }
@@ -141,7 +141,7 @@ public abstract class MmdMotionPlayer {
         MmdPmdModel_BasicClass pmd_model = this._ref_pmd_model;
         MmdVmdMotion_BasicClass vmd_model = this._ref_vmd_motion;
 
-        // 操作対象ボーンのポインタを設定す�?
+        // 操作対象ボーンのポインタを設定する
         MotionData[] pMotionDataList = vmd_model.refMotionDataArray();
         this.m_ppBoneList = new PmdBone[pMotionDataList.length];
         for (int i = 0; i < pMotionDataList.length; i++) {
@@ -157,25 +157,25 @@ public abstract class MmdMotionPlayer {
     }
 
     /**
-     * VMDの再生時間長を返します�?
+     * VMDの再生時間長を返します。
      * 
-     * @return ms単位の再生時�?
+     * @return ms単位の再生時間
      */
     public float getTimeLength() {
         return (float) (this._ref_vmd_motion.getMaxFrame() * (100.0 / 3));
     }
 
     /**
-     * 指定した時刻のモーションに更新します�?
+     * 指定した時刻のモーションに更新します。
      * 
-     * @param i_position_in_msec モーションの先頭からの時刻をms単位で指定します�?
+     * @param i_position_in_msec モーションの先頭からの時刻をms単位で指定します。
      * @throws MmdException
      */
     public void updateMotion(float i_position_in_msec) throws MmdException {
         final PmdIK[] ik_array = this._ref_pmd_model.getIKArray();
         final PmdBone[] bone_array = this._ref_pmd_model.getBoneArray();
         assert i_position_in_msec >= 0;
-        // 描画するフレームを計算する�?
+        // 描画するフレームを計算する。
         float frame = (float) (i_position_in_msec / (100.0 / 3));
         // 範囲外を除外
         if (frame > this._ref_vmd_motion.getMaxFrame()) {
@@ -188,7 +188,7 @@ public abstract class MmdMotionPlayer {
             bone.reset();
         }
 
-        // モーション更�?
+        // モーション更新
         this.updateBone(frame);
 
         eventBus.post(new UpdateBoneEvent.Pre(this._ref_pmd_model.getBoneArray(), this));
@@ -198,7 +198,7 @@ public abstract class MmdMotionPlayer {
             bone_array[i].updateMatrix();
         }
 
-        // IKの更�?
+        // IKの更新
         for (int i = 0; i < ik_array.length; i++) {
             ik_array[i].update();
         }
@@ -214,7 +214,7 @@ public abstract class MmdMotionPlayer {
             this.updateNeckBone();
         }
         //
-        // スキニング用行列の更�?
+        // スキニング用行列の更新
         for (int i = 0; i < bone_array.length; i++) {
             bone_array[i].updateSkinningMat(this._skinning_mat[i]);
         }
@@ -338,7 +338,7 @@ public abstract class MmdMotionPlayer {
         int i;
         int ulNumKeyFrame = pFaceData.ulNumKeyFrames;
 
-        // 最終フレームを過ぎていた場�?
+        // 最終フレームを過ぎていた場合
         if (fFrame > pFaceData.pKeyFrames[ulNumKeyFrame - 1].fFrameNo) {
             fFrame = pFaceData.pKeyFrames[ulNumKeyFrame - 1].fFrameNo;
         }
@@ -377,9 +377,3 @@ public abstract class MmdMotionPlayer {
     }
 
 }
-
-
-
-
-
-

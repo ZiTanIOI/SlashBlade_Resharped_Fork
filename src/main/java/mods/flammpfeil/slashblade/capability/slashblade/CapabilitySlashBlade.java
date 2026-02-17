@@ -13,9 +13,3 @@ public class CapabilitySlashBlade {
         event.register(ISlashBladeState.class);
     }
 }
-
-
-
-
-
-

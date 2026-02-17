@@ -44,13 +44,13 @@ import jp.nyatla.nymmd.types.MmdVector4;
 
 public class PmdIK {
     private PmdBone m_pTargetBone; // IKターゲットボーン
-    private PmdBone m_pEffBone; // IK先端ボー�?
+    private PmdBone m_pEffBone; // IK先端ボーン
 
     private int m_unCount;
     private double _fact;
     private int m_nSortVal;
 
-    private PmdBone[] m_ppBoneList; // IKを構成するボーンの配�?
+    private PmdBone[] m_ppBoneList; // IKを構成するボーンの配列
 
     private final MmdVector3[] _work_vector3 = MmdVector3.createArray(4);
     private final MmdVector4 _work_vector4 = new MmdVector4();
@@ -59,7 +59,7 @@ public class PmdIK {
         // IKターゲットボーン
         this.m_pTargetBone = i_ref_bone_array[pPMDIKData.nTargetNo];
 
-        // IK先端ボー�?
+        // IK先端ボーン
         this.m_pEffBone = i_ref_bone_array[pPMDIKData.nEffNo];
 
         this.m_unCount = pPMDIKData.unCount;
@@ -72,7 +72,7 @@ public class PmdIK {
         this.m_ppBoneList = new PmdBone[number_of_ik_link];// 参照
         for (int i = 0; i < number_of_ik_link; i++) {
             this.m_ppBoneList[i] = i_ref_bone_array[pPMDIKData.punLinkNo[i]]; // ボーン番号は降順で格納されている
-            if (this.m_ppBoneList[i].getName().equals("左ひ�?) || this.m_ppBoneList[i].getName().equals("右ひ�?)) {
+            if (this.m_ppBoneList[i].getName().equals("左ひざ") || this.m_ppBoneList[i].getName().equals("右ひざ")) {
                 this.m_ppBoneList[i].setIKLimitAngle(true);
             }
         }
@@ -94,7 +94,7 @@ public class PmdIK {
         vec3Angle.y = 0.0f;
         vec3Angle.z = 0.0f;
 
-        // XYZ軸回転からクォータニオン�?
+        // XYZ軸回転からクォータニオンへ
         pvec4Out.QuaternionCreateEuler(vec3Angle);
         return;
     }
@@ -114,7 +114,7 @@ public class PmdIK {
         final MmdVector3 vec3RotAxis = this._work_vector3[3];
         final MmdVector4 vec4RotQuat = this._work_vector4;
 
-        // 事前に全Boneをupdateしてるなら、このコードは要らな�?
+        // 事前に全Boneをupdateしてるなら、このコードは要らない?
         for (int i = this.m_ppBoneList.length - 1; i >= 0; i--) {
             this.m_ppBoneList[i].updateMatrix();
         }
@@ -122,12 +122,12 @@ public class PmdIK {
 
         for (int it = this.m_unCount - 1; it >= 0; it--) {
             for (int j = 0; j < this.m_ppBoneList.length; j++) {
-                // エフェクタの位置の取�?
+                // エフェクタの位置の取得
 
-                // ワールド座標系から注目ノードの局所(ローカル)座標系への変�?
+                // ワールド座標系から注目ノードの局所(ローカル)座標系への変換
                 matInvBone.inverse(m_ppBoneList[j].m_matLocal);
 
-                // エフェクタ，到達目標のローカル位�?
+                // エフェクタ，到達目標のローカル位置
                 vec3EffPos.Vector3Transform(m_pEffBone.m_matLocal, matInvBone);
                 vec3TargetPos.Vector3Transform(m_pTargetBone.m_matLocal, matInvBone);
 
@@ -141,12 +141,12 @@ public class PmdIK {
                 // (1) 基準関節→エフェクタ位置への方向ベクトル
                 vec3EffPos.Vector3Normalize(vec3EffPos);
 
-                // (2) 基準関節→目標位置への方向ベクト�?
+                // (2) 基準関節→目標位置への方向ベクトル
                 vec3TargetPos.Vector3Normalize(vec3TargetPos);
 
-                // ベクトル (1) �?(2) に一致させるための最短回転量（Axis-Angle�?
+                // ベクトル (1) を (2) に一致させるための最短回転量（Axis-Angle）
                 //
-                // 回転�?
+                // 回転角
                 double fRotAngle = Math.acos(vec3EffPos.Vector3DotProduct(vec3TargetPos));
 
                 if (0.00000001 < Math.abs(fRotAngle)) {
@@ -156,7 +156,7 @@ public class PmdIK {
                         fRotAngle = this._fact;
                     }
 
-                    // 回転�?
+                    // 回転軸
 
                     vec3RotAxis.Vector3CrossProduct(vec3EffPos, vec3TargetPos);
                     if (vec3RotAxis.Vector3DotProduct(vec3RotAxis) < 0.0000001) {
@@ -187,9 +187,3 @@ public class PmdIK {
         return;
     }
 }
-
-
-
-
-
-

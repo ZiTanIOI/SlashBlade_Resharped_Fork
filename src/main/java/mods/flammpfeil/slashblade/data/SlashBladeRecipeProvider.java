@@ -207,12 +207,6 @@ public class SlashBladeRecipeProvider extends RecipeProvider implements IConditi
         rodaiRecipe(SlashBladeBuiltInRegistry.RODAI_GOLDEN, Items.GOLDEN_SWORD, consumer);
         rodaiAdvRecipe(SlashBladeBuiltInRegistry.RODAI_DIAMOND, Items.DIAMOND_SWORD, consumer);
         rodaiAdvRecipe(SlashBladeBuiltInRegistry.RODAI_NETHERITE, Items.NETHERITE_SWORD, consumer);
-        
-        // 添加启程书的无序合成配方
-        ShapelessRecipeBuilder.shapeless(SlashBladeItems.BOOK_JOURNEY.get())
-                .requires(Items.WOODEN_SWORD)
-                .unlockedBy(getHasName(Items.WOODEN_SWORD), has(Items.WOODEN_SWORD))
-                .save(consumer, SlashBlade.prefix("book_journey"));
     }
 
     private void rodaiRecipe(ResourceLocation rodai, ItemLike sword, Consumer<FinishedRecipe> consumer) {

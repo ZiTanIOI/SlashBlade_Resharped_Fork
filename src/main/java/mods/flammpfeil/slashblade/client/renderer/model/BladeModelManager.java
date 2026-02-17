@@ -13,8 +13,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.concurrent.Executors;
 
 /**
@@ -31,20 +31,17 @@ public class BladeModelManager {
         return SingletonHolder.instance;
     }
 
+    @Nullable
     public static Registry<SlashBladeDefinition> getClientSlashBladeRegistry() {
         try {
-            var minecraft = Minecraft.getInstance();
-            var connection = minecraft.getConnection();
-            if (connection != null) {
-                var registryAccess = connection.registryAccess();
-                if (registryAccess != null) {
-                    return registryAccess.registry(SlashBladeDefinition.REGISTRY_KEY).orElse(null);
-                }
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.getConnection() == null) {
+                return null;
             }
+            return minecraft.getConnection().registryAccess().registry(SlashBladeDefinition.REGISTRY_KEY).orElse(null);
         } catch (Exception e) {
-            SlashBlade.LOGGER.warn("Error getting client slash blade registry: {}", e.getMessage());
+            return null;
         }
-        return null;
     }
 
     public WavefrontObject defaultModel;
@@ -80,9 +77,3 @@ public class BladeModelManager {
     }
 
 }
-
-
-
-
-
-

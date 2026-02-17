@@ -62,9 +62,3 @@ public class ConcentrationRank implements IConcentrationRank {
     }
 
 }
-
-
-
-
-
-

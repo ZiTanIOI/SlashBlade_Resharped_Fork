@@ -42,44 +42,44 @@ public class MmdMatrix {
     // <NyARToolkitからのポート>
     //////
 
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m00;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m01;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m02;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m03;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m10;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m11;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m12;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m13;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m20;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m21;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m22;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m23;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m30;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m31;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m32;
-    /** 行列の要素値です�?*/
+    /** 行列の要素値です。 */
     public double m33;
 
     /**
-     * この関数は、オブジェクトの配列を生成して返します�?
+     * この関数は、オブジェクトの配列を生成して返します。
      * 
-     * @param i_number 配列の長�?
-     * @return 新しいオブジェクト配�?
+     * @param i_number 配列の長さ
+     * @return 新しいオブジェクト配列
      */
     public static MmdMatrix[] createArray(int i_number) {
         MmdMatrix[] ret = new MmdMatrix[i_number];
@@ -90,7 +90,7 @@ public class MmdMatrix {
     }
 
     /**
-     * この関数は、要素数16の配列を、行列にセットします�?00,01,02,03,10...の順です�?
+     * この関数は、要素数16の配列を、行列にセットします。 00,01,02,03,10...の順です。
      */
     public void setValue(double[] i_value) {
         this.m00 = i_value[0];
@@ -113,9 +113,9 @@ public class MmdMatrix {
     }
 
     /**
-     * この関数は、オブジェクトの内容をインスタンスにコピーします�?
+     * この関数は、オブジェクトの内容をインスタンスにコピーします。
      * 
-     * @param i_value コピー元のオブジェク�?
+     * @param i_value コピー元のオブジェクト
      */
     public void setValue(MmdMatrix i_value) {
         this.m00 = i_value.m00;
@@ -138,7 +138,7 @@ public class MmdMatrix {
     }
 
     /**
-     * この関数は、要素数16の配列に、行列の内容をコピーします�?順番は�?0,01,02,03,10...の順です�?
+     * この関数は、要素数16の配列に、行列の内容をコピーします。 順番は、00,01,02,03,10...の順です。
      */
     public void getValue(double[] o_value) {
         o_value[0] = this.m00;
@@ -181,7 +181,7 @@ public class MmdMatrix {
     }
 
     /**
-     * この関数は、要素数16の配列に、行列の内容を転置してからコピーします�?順番は�?0,10,20,30,01...の順です�?
+     * この関数は、要素数16の配列に、行列の内容を転置してからコピーします。 順番は、00,10,20,30,01...の順です。
      * 
      * @param o_value 値を受け取る配列
      */
@@ -206,10 +206,10 @@ public class MmdMatrix {
     }
 
     /**
-     * この関数は、逆行列を計算して、インスタンスにセットします�?
+     * この関数は、逆行列を計算して、インスタンスにセットします。
      * 
-     * @param i_src 逆行列を計算するオブジェクト。thisを指定できます�?
-     * @return 逆行列を得られると、trueを返します�?
+     * @param i_src 逆行列を計算するオブジェクト。thisを指定できます。
+     * @return 逆行列を得られると、trueを返します。
      */
     public boolean inverse(MmdMatrix i_src) {
         final double a11, a12, a13, a14, a21, a22, a23, a24, a31, a32, a33, a34, a41, a42, a43, a44;
@@ -310,7 +310,7 @@ public class MmdMatrix {
     }
 
     /**
-     * この関数は、行列同士の掛け算をして、インスタンスに格納します�?i_mat_lとi_mat_rには、thisを指定しないでください�?
+     * この関数は、行列同士の掛け算をして、インスタンスに格納します。 i_mat_lとi_mat_rには、thisを指定しないでください。
      * 
      * @param i_mat_l 左成分の行列
      * @param i_mat_r 右成分の行列
@@ -357,7 +357,7 @@ public class MmdMatrix {
     }
 
     /**
-     * この関数は、行列を単位行列にします�?
+     * この関数は、行列を単位行列にします。
      */
     public final void identity() {
         this.m00 = this.m11 = this.m22 = this.m33 = 1;
@@ -453,9 +453,3 @@ public class MmdMatrix {
      * return matrixBuffer; }
      */
 }
-
-
-
-
-
-

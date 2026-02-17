@@ -50,9 +50,3 @@ public class SlashBladeItemPredicate extends ItemPredicate {
         return request;
     }
 }
-
-
-
-
-
-

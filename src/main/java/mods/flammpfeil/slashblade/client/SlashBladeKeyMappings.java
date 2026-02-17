@@ -15,9 +15,3 @@ public class SlashBladeKeyMappings {
             KeyConflictContext.IN_GAME, KeyModifier.NONE, InputConstants.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_MIDDLE,
             "key.category.slashblade");
 }
-
-
-
-
-
-

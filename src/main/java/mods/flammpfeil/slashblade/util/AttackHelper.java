@@ -34,11 +34,11 @@ import static mods.flammpfeil.slashblade.util.AttackManager.getSlashBladeDamageS
 
 public class AttackHelper {
     public static void attack(LivingEntity attacker, Entity target, float comboRatio) {
-        // 触发Forge事件，以兼容其他模组
+        // Forge
         if (attacker instanceof Player player && !ForgeHooks.onPlayerAttackTarget(player, target)) {
             return;
         }
-        // 判断攻击目标是否可以被攻�?
+        // ?
         if (!target.isAttackable() || target.skipAttackInteraction(attacker)) {
             return;
         }
@@ -77,7 +77,7 @@ public class AttackHelper {
     }
 
     /**
-     * 该方法伤害公�?(面板攻击�?+ 横扫之刃附魔加成 + 评分等级加成 + 杀手类附魔加成) * 连招伤害系数 * 拔刀伤害系数 * 拔刀剑伤害调整比�?* 暴击倍率
+     * ?(?+  +  + ) *  *  * ?* 
      */
     public static double calculateTotalDamage(LivingEntity attacker, Entity target, float comboRatio, boolean isCritical) {
         double baseDamage = attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
@@ -98,14 +98,14 @@ public class AttackHelper {
     }
 
     /**
-     * 横扫之刃附魔加成(三级加成3.25攻击�?
+     * (3.25?
      */
     public static float getSweepingBonus(LivingEntity attacker) {
         return 10 * (EnchantmentHelper.getSweepingDamageRatio(attacker) * 0.5f);
     }
 
     /**
-     * 评分等级加成
+     * 
      */
     public static float getRankBonus(LivingEntity attacker) {
         IConcentrationRank.ConcentrationRanks rankBonus = attacker
@@ -125,7 +125,7 @@ public class AttackHelper {
     }
 
     /**
-     * 杀手类附魔加成(杀死类附魔攻击对应的生物加�?.5 * 附魔等级)
+     * (?.5 * )
      */
     public static float getEnchantmentBonus(LivingEntity attacker, Entity target) {
         if (target instanceof LivingEntity living) {
@@ -136,7 +136,7 @@ public class AttackHelper {
     }
 
     /**
-     * 计算击退
+     * 
      */
     public static float calculateKnockback(LivingEntity attacker) {
         float knockback = (float) attacker.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
@@ -149,7 +149,7 @@ public class AttackHelper {
     }
 
     /**
-     * 判断是否暴击
+     * 
      */
     public static boolean isCriticalHit(LivingEntity attacker, Entity target) {
         return attacker.fallDistance > 0.0F && !attacker.isOnGround() &&
@@ -159,7 +159,7 @@ public class AttackHelper {
     }
 
     /**
-     * 火焰附加处理
+     * 
      */
     public static class FireAspectResult {
         final float preAttackHealth;
@@ -188,7 +188,7 @@ public class AttackHelper {
     }
 
     /**
-     * 应用击退
+     * 
      */
     public static void applyKnockback(LivingEntity attacker, Entity target, float knockback) {
         if (knockback > 0) {
@@ -203,7 +203,7 @@ public class AttackHelper {
     }
 
     /**
-     * 恢复目标原有速度（用于ServerPlayer�?
+     * erverPlayer?
      */
     public static void restoreTargetMotionIfNeeded(Entity target, Vec3 originalMotion) {
         if (target instanceof ServerPlayer serverPlayer && target.hurtMarked) {
@@ -214,7 +214,7 @@ public class AttackHelper {
     }
 
     /**
-     * 播放攻击音效与暴击效�?
+     * ?
      */
     public static void playAttackEffects(LivingEntity attacker, Entity target, boolean isCritical) {
         attacker.getLevel().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, attacker.getSoundSource(), 1.0F, 1.0F);
@@ -224,7 +224,7 @@ public class AttackHelper {
     }
 
     /**
-     * 处理附魔后置效果与耐久
+     * 
      */
     public static void handleEnchantmentsAndDurability(LivingEntity attacker, Entity target) {
         attacker.setLastHurtMob(target);
@@ -238,7 +238,7 @@ public class AttackHelper {
         if (target instanceof PartEntity<?> partEntity) {
             entity = partEntity.getParent();
         }
-        // 减少耐久
+        // 
         if (!attacker.getLevel().isClientSide() && !itemStack.isEmpty() && entity instanceof LivingEntity living) {
             ItemStack copy = itemStack.copy();
             Item item = itemStack.getItem();
@@ -255,38 +255,38 @@ public class AttackHelper {
     }
 
     /**
-     * 处理攻击后效果（统计、火焰、粒子、饱食度�?
+     * ?
      */
     public static void handlePostAttackEffects(LivingEntity attacker, Entity target, FireAspectResult fireAspectResult) {
         if (target instanceof LivingEntity) {
             float damageDealt = fireAspectResult.preAttackHealth - ((LivingEntity) target).getHealth();
-            //伤害统计
+            //
             if (attacker instanceof Player player) {
                 player.awardStat(Stats.DAMAGE_DEALT, Math.round(damageDealt * 10.0F));
             }
-            //应用完整的火焰附加效�?每级4�?
+            //?4?
             if (fireAspectResult.fireAspectLevel > 0) {
                 target.setSecondsOnFire(fireAspectResult.fireAspectLevel * 4);
             }
-            // 伤害粒子
+            // 
             if (attacker.getLevel() instanceof ServerLevel && damageDealt > 2.0F) {
                 int k = (int) (damageDealt * 0.5D);
                 ((ServerLevel) attacker.getLevel()).sendParticles(ParticleTypes.DAMAGE_INDICATOR, target.getX(), target.getY(0.5D), target.getZ(), k, 0.1D, 0.0D, 0.1D, 0.2D);
             }
         }
-        // 消耗饱食度
+        // 
         if (attacker instanceof Player player) {
             player.causeFoodExhaustion(0.1F);
         }
     }
 
     /**
-     * 处理攻击未成功的情况
+     * 
      */
     public static void handleFailedAttack(LivingEntity attacker, Entity target, FireAspectResult fireAspectResult) {
         attacker.getLevel().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, attacker.getSoundSource(), 1.0F, 1.0F);
         if (fireAspectResult.shouldSetFire) {
-            //取消预火焰附加效�?
+            //?
             target.clearFire();
         }
     }

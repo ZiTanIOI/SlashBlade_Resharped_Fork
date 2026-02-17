@@ -3,25 +3,26 @@ package mods.flammpfeil.slashblade.item;
 import com.google.common.collect.*;
 import mods.flammpfeil.slashblade.SlashBlade;
 import mods.flammpfeil.slashblade.SlashBladeConfig;
-import mods.flammpfeil.slashblade.SlashBladeCreativeGroup;
 import mods.flammpfeil.slashblade.capability.inputstate.IInputState;
 import mods.flammpfeil.slashblade.capability.slashblade.ISlashBladeState;
 import mods.flammpfeil.slashblade.capability.slashblade.NamedBladeStateCapabilityProvider;
-// 移除1.19.2不兼容的导入
 import mods.flammpfeil.slashblade.client.renderer.SlashBladeTEISR;
 import mods.flammpfeil.slashblade.data.tag.SlashBladeItemTags;
 import mods.flammpfeil.slashblade.entity.BladeItemEntity;
 import mods.flammpfeil.slashblade.event.SlashBladeEvent;
+import mods.flammpfeil.slashblade.event.handler.SlashBladeRegistryHandler;
 import mods.flammpfeil.slashblade.init.DefaultResources;
 import mods.flammpfeil.slashblade.registry.ComboStateRegistry;
 import mods.flammpfeil.slashblade.registry.SlashBladeItems;
 import mods.flammpfeil.slashblade.registry.combo.ComboState;
 import mods.flammpfeil.slashblade.registry.specialeffects.SpecialEffect;
+import mods.flammpfeil.slashblade.registry.slashblade.SlashBladeDefinition;
 import mods.flammpfeil.slashblade.util.InputCommand;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -46,10 +47,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,15 +56,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
@@ -105,15 +101,6 @@ public class ItemSlashBlade extends SwordItem {
         return this.getBladeId(itemStack).getNamespace();
     }
 
-    public static class ReachModifier {
-        public static double BladeReach() {
-            return 0.5;
-        }
-        public static double BrokendReach() {
-            return 0.25;
-        }
-    }
-
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> def = super.getAttributeModifiers(slot, stack);
@@ -139,7 +126,7 @@ public class ItemSlashBlade extends SwordItem {
                     attackAmplifier = -0.5F - baseAttackModifier;
                 } else {
                     float refineFactor = swordType.contains(SwordType.FIERCEREDGE) ? 0.1F : 0.05F;
-                    // 锻造伤害面板增加计算，非线性，收益递减（理论最大值为额外100%基础攻击）
+                    // 锻造伤害面板增加计算，非线性，收益递减。(理论最大值为额外100%基础攻击)
                     attackAmplifier = (1.0F - (1.0F / (1.0F + (refineFactor * refine)))) * baseAttackModifier;
                 }
 
@@ -153,11 +140,6 @@ public class ItemSlashBlade extends SwordItem {
 
                 result.remove(Attributes.ATTACK_DAMAGE, attack);
                 result.put(Attributes.ATTACK_DAMAGE, attack);
-
-                result.put(ForgeMod.REACH_DISTANCE.get(),
-                        new AttributeModifier(PLAYER_REACH_AMPLIFIER, "Reach amplifer",
-                                s.isBroken() ? ReachModifier.BrokendReach() : ReachModifier.BladeReach(),
-                                AttributeModifier.Operation.ADDITION));
 
             });
         }
@@ -326,14 +308,7 @@ public class ItemSlashBlade extends SwordItem {
                     if (!tag.getBoolean(isReleased)) {
                         this.getPersistentData().putBoolean(isReleased, true);
 
-                        if (this.getLevel() instanceof ServerLevel) {
-                            // 1.19.2中getOwner()返回UUID，需要修改获取thrower的逻辑
-                            Entity thrower = null;
-
-                            if (thrower != null) {
-                                thrower.getPersistentData().remove(BREAK_ACTION_TIMEOUT);
-                            }
-                        }
+                        // 1.19.2 fallback: skip owner timeout cleanup when owner entity is not directly available.
                     }
 
                     return super.causeFallDamage(distance, damageMultiplier, ds);
@@ -464,12 +439,12 @@ public class ItemSlashBlade extends SwordItem {
                 return;
             }
 
-            if (entityIn instanceof Player player) {
-                if (!SlashBladeConfig.SELF_REPAIR_ENABLE.get()) {
-                    return;
-                }
-                if (!isSelected) {
-                    var swordType = SwordType.from(stack);
+            if (!isSelected) {
+                var swordType = SwordType.from(stack);
+                if (entityIn instanceof Player player) {
+                    if (!SlashBladeConfig.SELF_REPAIR_ENABLE.get()) {
+                        return;
+                    }
                     boolean hasHunger = player.hasEffect(MobEffects.HUNGER) && SlashBladeConfig.HUNGER_CAN_REPAIR.get();
                     if (swordType.contains(SwordType.BEWITCHED) || hasHunger) {
                         if (stack.getDamageValue() > 0 && player.getFoodData().getFoodLevel() > 0) {
@@ -623,12 +598,12 @@ public class ItemSlashBlade extends SwordItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         stack.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-            this.appendSwordType(stack, worldIn, tooltip, flagIn); // �?
+            this.appendSwordType(stack, worldIn, tooltip, flagIn); // √
             this.appendProudSoulCount(tooltip, stack);
             this.appendKillCount(tooltip, stack);
-            this.appendSlashArt(stack, tooltip, s); // �?
+            this.appendSlashArt(stack, tooltip, s); // √
             this.appendRefineCount(tooltip, stack);
-            this.appendSpecialEffects(tooltip, s); // �?
+            this.appendSpecialEffects(tooltip, s); // √
         });
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
@@ -754,7 +729,7 @@ public class ItemSlashBlade extends SwordItem {
     }
 
     /**
-     * 原来的方法替换掉落实体时无法Copy假物品实体相关的NBT，因为获取物品指令是先生成的物品实体再设置的假物�?
+     * 原来的方法替换掉落实体时无法Copy假物品实体相关的NBT，因为获取物品指令是先生成的物品实体再设置的假物品
      */
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
@@ -775,6 +750,25 @@ public class ItemSlashBlade extends SwordItem {
     }
 
     @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if (!this.allowedIn(group)) {
+            return;
+        }
+        super.fillItemCategory(group, items);
+
+        if (!SlashBladeItems.SLASHBLADE.isPresent() || this != SlashBladeItems.SLASHBLADE.get()) {
+            return;
+        }
+
+        for (SlashBladeDefinition definition : SlashBladeRegistryHandler.getCachedBladeDefinitions().values()) {
+            ItemStack blade = definition.getBlade();
+            if (blade.getItem() == this) {
+                items.add(blade);
+            }
+        }
+    }
+
+    @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 
         consumer.accept(new IClientItemExtensions() {
@@ -790,350 +784,4 @@ public class ItemSlashBlade extends SwordItem {
 
         super.initializeClient(consumer);
     }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        // 只在我们的创造模式标签中添加物品变体
-        if (group == SlashBladeCreativeGroup.TAB) {
-            // 添加默认的无铭刀
-            super.fillItemCategory(group, items);
-            
-            // 添加所有命名刀变体
-            addNamedBladesToCreative(items);
-        }
-    }
-
-    private void addNamedBladesToCreative(NonNullList<ItemStack> items) {
-        try {
-            // 添加鄂门
-            ItemStack orotiagito = new ItemStack(this);
-            orotiagito.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/agito.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/orotiagito.png"));
-                s.setBaseAttackModifier(7.0F);
-                s.setMaxDamage(60);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "wave_edge"));
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "bewitched"));
-                s.setTranslationKey("item.slashblade.orotiagito");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = orotiagito.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            orotiagito.setHoverName(Component.translatable("item.slashblade.orotiagito"));
-            items.add(orotiagito);
-            
-            // 添加村正
-            ItemStack muramasa = new ItemStack(this);
-            muramasa.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/muramasa/muramasa.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/muramasa/muramasa.png"));
-                s.setBaseAttackModifier(7.0F);
-                s.setMaxDamage(50);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "drive_vertical"));
-                s.setTranslationKey("item.slashblade.muramasa");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = muramasa.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            muramasa.setHoverName(Component.translatable("item.slashblade.muramasa"));
-            items.add(muramasa);
-            
-            // 添加阎魔刀
-            ItemStack yamato = new ItemStack(this);
-            yamato.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/yamato.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/yamato.png"));
-                s.setBaseAttackModifier(7.0F);
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "bewitched"));
-                s.setTranslationKey("item.slashblade.yamato");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = yamato.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            yamato.setHoverName(Component.translatable("item.slashblade.yamato"));
-            items.add(yamato);
-            
-            // 添加锈刀
-            ItemStack agitoRust = new ItemStack(this);
-            agitoRust.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/agito.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/agito_rust.png"));
-                s.setBaseAttackModifier(3.0F);
-                s.setMaxDamage(60);
-                s.setSealed(true);
-                s.setTranslationKey("item.slashblade.sabigatana");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = agitoRust.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            agitoRust.setHoverName(Component.translatable("item.slashblade.sabigatana"));
-            items.add(agitoRust);
-            
-            // 添加付丧结月
-            ItemStack tukumo = new ItemStack(this);
-            tukumo.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/agito.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/a_tukumo.png"));
-                s.setBaseAttackModifier(6.0F);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "drive_horizontal"));
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "bewitched"));
-                s.setTranslationKey("item.slashblade.yuzukitukumo");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = tukumo.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            tukumo.setHoverName(Component.translatable("item.slashblade.yuzukitukumo"));
-            items.add(tukumo);
-            
-            // 添加枯石大刀
-            ItemStack koseki = new ItemStack(this);
-            koseki.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/dios/dios.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/dios/koseki.png"));
-                s.setBaseAttackModifier(5.0F);
-                s.setMaxDamage(70);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "drive_vertical"));
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "bewitched"));
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "wither_edge"));
-                s.setTranslationKey("item.slashblade.koseki");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = koseki.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            koseki.setHoverName(Component.translatable("item.slashblade.koseki"));
-            items.add(koseki);
-            
-            // 添加散华
-            ItemStack sange = new ItemStack(this);
-            sange.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/sange/sange.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/sange/sange.png"));
-                s.setBaseAttackModifier(6.0F);
-                s.setMaxDamage(70);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "void_slash"));
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "bewitched"));
-                s.setTranslationKey("item.slashblade.sange");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = sange.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            sange.setHoverName(Component.translatable("item.slashblade.sange"));
-            items.add(sange);
-            
-            // 添加钢剑胴田贯
-            ItemStack doutanuki = new ItemStack(this);
-            doutanuki.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/muramasa/muramasa.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/muramasa/doutanuki.png"));
-                s.setBaseAttackModifier(5.0F);
-                s.setMaxDamage(60);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "circle_slash"));
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "bewitched"));
-                s.setTranslationKey("item.slashblade.doutanuki");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = doutanuki.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            doutanuki.setHoverName(Component.translatable("item.slashblade.doutanuki"));
-            items.add(doutanuki);
-            
-            // 添加夜叉
-            ItemStack yasha = new ItemStack(this);
-            yasha.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/yasha/yasha.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/yasha/yasha.png"));
-                s.setBaseAttackModifier(6.0F);
-                s.setMaxDamage(70);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "sakura_end"));
-                s.setTranslationKey("item.slashblade.yasha");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = yasha.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            yasha.setHoverName(Component.translatable("item.slashblade.yasha"));
-            items.add(yasha);
-            
-            // 添加真夜叉
-            ItemStack yashaTrue = new ItemStack(this);
-            yashaTrue.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/yasha/yasha_true.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/yasha/yasha.png"));
-                s.setBaseAttackModifier(6.0F);
-                s.setMaxDamage(70);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "circle_slash"));
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "bewitched"));
-                s.setTranslationKey("item.slashblade.yasha_true");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = yashaTrue.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            yashaTrue.setHoverName(Component.translatable("item.slashblade.yasha_true"));
-            items.add(yashaTrue);
-            
-            // 添加黑狐
-            ItemStack foxBlack = new ItemStack(this);
-            foxBlack.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/sange/sange.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/sange/black.png"));
-                s.setBaseAttackModifier(5.0F);
-                s.setMaxDamage(70);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "piercing"));
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "bewitched"));
-                s.setTranslationKey("item.slashblade.fox_black");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = foxBlack.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            foxBlack.setHoverName(Component.translatable("item.slashblade.fox_black"));
-            items.add(foxBlack);
-            
-            // 添加白狐
-            ItemStack foxWhite = new ItemStack(this);
-            foxWhite.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/sange/sange.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/sange/white.png"));
-                s.setBaseAttackModifier(5.0F);
-                s.setMaxDamage(70);
-                s.addSpecialEffect(new ResourceLocation(SlashBlade.MODID, "bewitched"));
-                s.setTranslationKey("item.slashblade.fox_white");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = foxWhite.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            foxWhite.setHoverName(Component.translatable("item.slashblade.fox_white"));
-            items.add(foxWhite);
-            
-            // 添加鄂门（封）
-            ItemStack orotiagitoSealed = new ItemStack(this);
-            orotiagitoSealed.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/agito.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/agito_true.png"));
-                s.setBaseAttackModifier(5.0F);
-                s.setMaxDamage(60);
-                s.setSlashArtsKey(new ResourceLocation(SlashBlade.MODID, "wave_edge"));
-                s.setSealed(true);
-                s.setTranslationKey("item.slashblade.orotiagito_sealed");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = orotiagitoSealed.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            orotiagitoSealed.setHoverName(Component.translatable("item.slashblade.orotiagito_sealed"));
-            items.add(orotiagitoSealed);
-            
-            // 添加鄂门（锈）
-            ItemStack orotiagitoRust = new ItemStack(this);
-            orotiagitoRust.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/agito.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/agito_rust_true.png"));
-                s.setBaseAttackModifier(3.0F);
-                s.setMaxDamage(60);
-                s.setSealed(true);
-                s.setTranslationKey("item.slashblade.orotiagito_rust");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = orotiagitoRust.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            orotiagitoRust.setHoverName(Component.translatable("item.slashblade.orotiagito_rust"));
-            items.add(orotiagitoRust);
-            
-            // 添加断阎魔刀
-            ItemStack yamatoBroken = new ItemStack(this);
-            yamatoBroken.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(s -> {
-                s.setNonEmpty();
-                s.setModel(new ResourceLocation(SlashBlade.MODID, "model/named/yamato.obj"));
-                s.setTexture(new ResourceLocation(SlashBlade.MODID, "model/named/yamato.png"));
-                s.setBaseAttackModifier(7.0F);
-                s.setBroken(true);
-                s.setSealed(true);
-                s.setTranslationKey("item.slashblade.yamato_broken");
-                // 手动保存状态到ItemStack的tag中
-                CompoundTag tag = yamatoBroken.getOrCreateTag();
-                tag.put("bladeState", s.serializeNBT());
-            });
-            yamatoBroken.setHoverName(Component.translatable("item.slashblade.yamato_broken"));
-            items.add(yamatoBroken);
-        } catch (Exception e) {
-            SlashBlade.LOGGER.warn("Failed to add named blades to creative menu: {}", e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    
-    // 处理铁砧重命名逻辑
-    public static ItemStack applyAnvilRename(ItemStack stack, String newName) {
-        ItemStack result = stack.copy();
-        result.setHoverName(Component.literal(newName));
-        
-        // 当重命名时，将刀变为"印"刀
-        result.getCapability(BLADESTATE).ifPresent(state -> {
-            // 检查是否是无铭或由无铭合成的刀
-            ItemSlashBlade bladeItem = (ItemSlashBlade) stack.getItem();
-            ResourceLocation bladeId = bladeItem.getBladeId(stack);
-            if (bladeId != null && bladeId.getPath().equals("slashblade")) {
-                // 移除"封"状态，添加"印"状态
-                state.setSealed(false);
-                // 这里可以添加印刀的特殊属性或标签
-                // 例如：state.setSpecialEffect("seal");
-            }
-        });
-        
-        return result;
-    }
-} 
-
-// 添加铁砧事件处理器
-@net.minecraftforge.fml.common.Mod.EventBusSubscriber(modid = SlashBlade.MODID, bus = net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.FORGE)
-class AnvilEventHandler {
-    @SubscribeEvent
-    public static void onAnvilUpdate(AnvilUpdateEvent event) {
-        ItemStack left = event.getLeft();
-        String newName = event.getName();
-        
-        if (!left.isEmpty() && left.getItem() instanceof ItemSlashBlade && newName != null && !newName.isEmpty()) {
-            // 处理铁砧重命名
-            ItemStack result = ItemSlashBlade.applyAnvilRename(left, newName);
-            event.setOutput(result);
-            event.setCost(1); // 设置重命名的经验成本
-        }
-        
-        // 处理封刀附魔逻辑
-        if (!left.isEmpty() && left.getItem() instanceof ItemSlashBlade && !event.getRight().isEmpty() && event.getRight().getItem() instanceof EnchantedBookItem) {
-            ItemStack result = left.copy();
-            
-            // 应用附魔
-            // 在1.19.2中，使用EnchantmentHelper来获取和应用附魔
-            net.minecraft.world.item.enchantment.EnchantmentHelper.setEnchantments(
-                net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantments(event.getRight()),
-                result
-            );
-            
-            // 封刀后变为妖刀
-            result.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(state -> {
-                state.setSealed(true);
-            });
-            
-            event.setOutput(result);
-            event.setMaterialCost(1);
-            event.setCost(5); // 设置附魔的经验成本
-        }
-    }
 }
-
-
-
-
-
-

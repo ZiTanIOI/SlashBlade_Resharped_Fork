@@ -40,7 +40,7 @@ package jp.nyatla.nymmd.types;
 public class BoneKeyFrame {
     public float fFrameNo; // フレーム番号
     public final MmdVector3 vec3Position = new MmdVector3(); // 位置
-    public final MmdVector4 vec4Rotate = new MmdVector4(); // 回転(クォータニオ�?
+    public final MmdVector4 vec4Rotate = new MmdVector4(); // 回転(クォータニオン)
 
     public static BoneKeyFrame[] createArray(int i_length) {
         BoneKeyFrame[] ret = new BoneKeyFrame[i_length];
@@ -52,12 +52,6 @@ public class BoneKeyFrame {
     /*
      * float fFrameNo; // フレーム番号
      * 
-     * Vector3 vec3Position; // 位置 Vector4 vec4Rotate; // 回転(クォータニオ�?
+     * Vector3 vec3Position; // 位置 Vector4 vec4Rotate; // 回転(クォータニオン)
      */
 }
-
-
-
-
-
-

@@ -13,9 +13,3 @@ public class TextureCoordinate {
         this.w = w;
     }
 }
-
-
-
-
-
-

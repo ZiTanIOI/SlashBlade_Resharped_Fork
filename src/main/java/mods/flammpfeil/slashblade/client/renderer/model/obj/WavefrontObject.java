@@ -509,9 +509,3 @@ public class WavefrontObject {
         return "obj";
     }
 }
-
-
-
-
-
-

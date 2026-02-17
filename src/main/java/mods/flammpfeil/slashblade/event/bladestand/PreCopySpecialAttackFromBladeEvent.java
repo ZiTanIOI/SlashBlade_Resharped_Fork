@@ -43,9 +43,3 @@ public class PreCopySpecialAttackFromBladeEvent extends SlashBladeEvent {
         return originalEvent;
     }
 }
-
-
-
-
-
-

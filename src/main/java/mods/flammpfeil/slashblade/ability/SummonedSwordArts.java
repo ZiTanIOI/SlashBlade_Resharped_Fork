@@ -112,7 +112,6 @@ public class SummonedSwordArts {
                     return;
                 }
                 state.setProudSoulCount(state.getProudSoulCount() - SlashBladeConfig.SUMMON_SWORD_COST.get());
-                //幻影�?
                 AdvancementHelper.grantCriterion(sender, ADVANCEMENT_SUMMONEDSWORDS);
 
                 Optional<Entity> foundTarget = findTarget(sender, state.getTargetEntity(sender.getLevel()));
@@ -220,7 +219,6 @@ public class SummonedSwordArts {
                 state.setProudSoulCount(
                         state.getProudSoulCount() - SlashBladeConfig.SUMMON_SWORD_ART_COST.get());
 
-                //圆环幻影�?
                 AdvancementHelper.grantCriterion(entity, ADVANCEMENT_SPIRAL_SWORDS);
 
                 Level worldIn = entity.getLevel();
@@ -287,7 +285,6 @@ public class SummonedSwordArts {
             }
             state.setProudSoulCount(
                     state.getProudSoulCount() - SlashBladeConfig.SUMMON_SWORD_ART_COST.get());
-            //烈风环影�?
             AdvancementHelper.grantCriterion(entity, ADVANCEMENT_STORM_SWORDS);
 
             int rank = entity.getCapability(CapabilityConcentrationRank.RANK_POINT)
@@ -346,7 +343,6 @@ public class SummonedSwordArts {
             }
             state.setProudSoulCount(
                     state.getProudSoulCount() - SlashBladeConfig.SUMMON_SWORD_ART_COST.get());
-            //急袭幻影�?
             AdvancementHelper.grantCriterion(entity, ADVANCEMENT_BLISTERING_SWORDS);
 
             int rank = entity.getCapability(CapabilityConcentrationRank.RANK_POINT)
@@ -408,7 +404,6 @@ public class SummonedSwordArts {
             state.setProudSoulCount(
                     state.getProudSoulCount() - SlashBladeConfig.SUMMON_SWORD_ART_COST.get());
 
-            //五月�?
             AdvancementHelper.grantCriterion(entity, ADVANCEMENT_HEAVY_RAIN_SWORDS);
 
             int rank = entity.getCapability(CapabilityConcentrationRank.RANK_POINT)

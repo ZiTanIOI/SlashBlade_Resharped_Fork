@@ -44,9 +44,3 @@ public class ARMixinPlugin implements IMixinConfigPlugin {
     }
 
 }
-
-
-
-
-
-

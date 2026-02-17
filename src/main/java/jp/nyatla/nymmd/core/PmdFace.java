@@ -45,13 +45,13 @@ import jp.nyatla.nymmd.types.MmdVector3;
 public class PmdFace {
     private String _name;
 
-    private PMD_FACE_VTX[] _face_vertex; // 表情頂点デー�?
+    private PMD_FACE_VTX[] _face_vertex; // 表情頂点データ
 
     public PmdFace(PMD_FACE pPMDFaceData, PmdFace pPMDFaceBase) {
-        // 表情名のコピ�?
+        // 表情名のコピー
         this._name = pPMDFaceData.szName;
 
-        // 表情頂点データのコピ�?
+        // 表情頂点データのコピー
         final int number_of_vertex = pPMDFaceData.ulNumVertices;
 
         this._face_vertex = PMD_FACE_VTX.createArray(number_of_vertex);
@@ -101,9 +101,3 @@ public class PmdFace {
         return this._name;
     }
 }
-
-
-
-
-
-

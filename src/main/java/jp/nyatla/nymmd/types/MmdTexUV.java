@@ -54,9 +54,3 @@ public class MmdTexUV {
         return;
     }
 }
-
-
-
-
-
-

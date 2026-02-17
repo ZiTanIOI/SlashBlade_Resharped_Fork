@@ -1,6 +1,6 @@
 package mods.flammpfeil.slashblade.item;
 
-// 移除1.19.2不兼容的导入
+import mods.flammpfeil.slashblade.data.tag.SlashBladeItemTags;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
@@ -42,12 +42,6 @@ public class ItemTierSlashBlade implements Tier {
 
     @Override
     public @NotNull Ingredient getRepairIngredient() {
-        return Ingredient.EMPTY;
+        return Ingredient.of(SlashBladeItemTags.PROUD_SOULS);
     }
 }
-
-
-
-
-
-

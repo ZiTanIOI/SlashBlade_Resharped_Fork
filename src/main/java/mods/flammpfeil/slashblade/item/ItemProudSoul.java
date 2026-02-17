@@ -14,9 +14,3 @@ public class ItemProudSoul extends Item {
         return true;
     }
 }
-
-
-
-
-
-

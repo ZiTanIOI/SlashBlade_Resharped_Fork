@@ -48,9 +48,3 @@ public abstract class MixinItemEmiStack extends EmiStack {
     }
 
 }
-
-
-
-
-
-

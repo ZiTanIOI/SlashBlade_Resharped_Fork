@@ -54,9 +54,3 @@ public record SlashBladeShapedRecipeSerializer<T extends Recipe<?>, U extends T>
         }
     }
 }
-
-
-
-
-
-

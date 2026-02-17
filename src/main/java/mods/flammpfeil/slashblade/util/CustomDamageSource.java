@@ -11,9 +11,3 @@ public class CustomDamageSource {
             new ResourceLocation(SlashBlade.MODID, "summonedsword"));
 
 }
-
-
-
-
-
-

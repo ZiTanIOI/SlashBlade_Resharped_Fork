@@ -71,9 +71,3 @@ public class PMD_FACE_VTX implements StructType {
      * unsigned long ulIndex; Vector3 vec3Pos;
      */
 }
-
-
-
-
-
-

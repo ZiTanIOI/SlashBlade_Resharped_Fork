@@ -14,9 +14,3 @@ public class CapabilityMobEffect {
         event.register(IMobEffectState.class);
     }
 }
-
-
-
-
-
-

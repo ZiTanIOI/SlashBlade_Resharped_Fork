@@ -18,9 +18,3 @@ public class SpecialEffectsRegistry {
     public static final RegistryObject<SpecialEffect> WITHER_EDGE = SPECIAL_EFFECT.register("wither_edge",
             WitherEdge::new);
 }
-
-
-
-
-
-

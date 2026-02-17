@@ -46,18 +46,18 @@ public class PmdBone {
     private String _name;
     public final MmdVector3 _pmd_bone_position = new MmdVector3();
     public final MmdVector3 m_vec3Offset = new MmdVector3();
-    public final MmdMatrix m_matInvTransform = new MmdMatrix(); // 初期値のボーンを原点に移動させるような行�?
+    public final MmdMatrix m_matInvTransform = new MmdMatrix(); // 初期値のボーンを原点に移動させるような行列
 
     public PmdBone _parent_bone;
     public PmdBone m_pChildBone;
 
-    // 以下は現在の�?
+    // 以下は現在の値
     public final MmdMatrix m_matLocal = new MmdMatrix();
 
     // 強制public
     public final MmdVector3 m_vec3Position = new MmdVector3();
     public final MmdVector4 m_vec4Rotate = new MmdVector4();
-    public boolean m_bIKLimitAngle; // IK時に角度制限をするかどう�?
+    public boolean m_bIKLimitAngle; // IK時に角度制限をするかどうか
     // 強制public/
 
     public String getName() {
@@ -71,7 +71,7 @@ public class PmdBone {
         // 位置のコピー
         this._pmd_bone_position.setValue(pPMDBoneData.vec3Position);
 
-        // 親ボーンの設�?
+        // 親ボーンの設定
         if (pPMDBoneData.nParentNo != -1) {
             this._parent_bone = pBoneArray[pPMDBoneData.nParentNo];
             if (this._parent_bone != null) {
@@ -80,12 +80,12 @@ public class PmdBone {
                 m_vec3Offset.Vector3Sub(this._pmd_bone_position, new MmdVector3(0, 1, 0));
             }
         } else {
-            // 親な�?
+            // 親なし
             this._parent_bone = null;
             this.m_vec3Offset.setValue(this._pmd_bone_position);
         }
 
-        // 子ボーンの設�?
+        // 子ボーンの設定
         if (pPMDBoneData.nChildNo != -1) {
             this.m_pChildBone = pBoneArray[pPMDBoneData.nChildNo];
         }
@@ -136,7 +136,7 @@ public class PmdBone {
             this._mat_tmp1.m30 = m_vec3Position.x + m_vec3Offset.x;
             this._mat_tmp1.m31 = m_vec3Position.y + m_vec3Offset.y;
             this._mat_tmp1.m32 = m_vec3Position.z + m_vec3Offset.z;
-            // 親があるなら親の回転を受け継�?
+            // 親があるなら親の回転を受け継ぐ
             m_matLocal.mul(this._mat_tmp1, this._parent_bone.m_matLocal);
         } else {
             // クォータニオンと移動値からボーンのローカルマトリックスを作成
@@ -212,9 +212,3 @@ public class PmdBone {
         m_vec4Rotate.QuaternionCreateEuler(vec3Angle);
     }
 }
-
-
-
-
-
-

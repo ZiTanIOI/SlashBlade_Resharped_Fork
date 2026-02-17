@@ -42,9 +42,3 @@ public class PmdSkinInfo {
     public int unBoneNo_0;
     public int unBoneNo_1;
 }
-
-
-
-
-
-

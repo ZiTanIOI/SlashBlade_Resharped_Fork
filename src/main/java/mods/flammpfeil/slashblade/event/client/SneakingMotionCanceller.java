@@ -54,9 +54,3 @@ public class SneakingMotionCanceller {
         event.getPoseStack().translate(offset.x, offset.y, offset.z);
     }
 }
-
-
-
-
-
-

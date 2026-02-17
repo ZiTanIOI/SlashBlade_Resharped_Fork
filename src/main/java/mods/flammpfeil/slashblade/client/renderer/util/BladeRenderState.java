@@ -152,7 +152,7 @@ public class BladeRenderState extends RenderStateShard {
     public static RenderType getSlashBladeGlint() {
         RenderType.CompositeState state = RenderType.CompositeState.builder()
                 .setShaderState(RENDERTYPE_GLINT_TRANSLUCENT_SHADER)
-                .setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("textures/misc/enchanted_glint_entity.png"), true, false))
+                .setTextureState(new RenderStateShard.TextureStateShard(ItemRenderer.ENCHANT_GLINT_LOCATION, true, false))
                 .setWriteMaskState(COLOR_WRITE)
                 .setCullState(NO_CULL)
                 .setDepthTestState(EQUAL_DEPTH_TEST)
@@ -170,7 +170,7 @@ public class BladeRenderState extends RenderStateShard {
     public static RenderType getSlashBladeItemGlint() {
         RenderType.CompositeState state = RenderType.CompositeState.builder()
                 .setShaderState(RENDERTYPE_GLINT_TRANSLUCENT_SHADER)
-                .setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("textures/misc/enchanted_glint_item.png"), true, false))
+                .setTextureState(new RenderStateShard.TextureStateShard(ItemRenderer.ENCHANT_GLINT_LOCATION, true, false))
                 .setWriteMaskState(COLOR_WRITE)
                 .setCullState(NO_CULL)
                 .setDepthTestState(EQUAL_DEPTH_TEST)

@@ -46,9 +46,3 @@ public class PmdMaterial {
     public short[] indices;
     public int unknown;
 };
-
-
-
-
-
-

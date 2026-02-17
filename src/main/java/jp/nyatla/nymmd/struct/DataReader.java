@@ -48,7 +48,7 @@ public class DataReader {
 
     public DataReader(InputStream i_stream) throws MmdException {
         try {
-            // コレなんとかしよう。C#のBinaryReaderみたいに振舞うように�?
+            // コレなんとかしよう。C#のBinaryReaderみたいに振舞うように。
             int file_len = i_stream.available();
             if (file_len < 1) {
                 file_len = 2 * 1024 * 1024;
@@ -69,7 +69,7 @@ public class DataReader {
 
     public int read() {
         int v = this._buf.get();
-        return (v >= 0) ? v : 0xff + v;// unsignedに戻�?
+        return (v >= 0) ? v : 0xff + v;// unsignedに戻す
     }
 
     public short readShort() {
@@ -78,7 +78,7 @@ public class DataReader {
 
     public int readUnsignedShort() {
         int v = this._buf.getShort();
-        return (v >= 0) ? v : 0xffff + v;// unsignedに戻�?
+        return (v >= 0) ? v : 0xffff + v;// unsignedに戻す
     }
 
     public int readInt() {
@@ -118,9 +118,3 @@ public class DataReader {
         }
     }
 }
-
-
-
-
-
-

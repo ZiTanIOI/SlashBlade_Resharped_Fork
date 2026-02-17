@@ -60,9 +60,3 @@ public class RefineProgressEvent extends SlashBladeEvent {
         return this.refineResult;
     }
 }
-
-
-
-
-
-

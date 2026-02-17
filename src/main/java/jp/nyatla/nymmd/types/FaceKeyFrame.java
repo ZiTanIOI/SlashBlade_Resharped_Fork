@@ -39,7 +39,7 @@ package jp.nyatla.nymmd.types;
 
 public class FaceKeyFrame {
     public float fFrameNo; // フレーム番号
-    public float fRate; // ブレンド�?
+    public float fRate; // ブレンド率
 
     public static FaceKeyFrame[] createArray(int i_length) {
         FaceKeyFrame[] ret = new FaceKeyFrame[i_length];
@@ -49,9 +49,3 @@ public class FaceKeyFrame {
         return ret;
     }
 }
-
-
-
-
-
-

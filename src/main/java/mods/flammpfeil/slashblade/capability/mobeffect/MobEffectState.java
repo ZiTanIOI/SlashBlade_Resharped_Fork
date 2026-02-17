@@ -106,9 +106,3 @@ public class MobEffectState implements IMobEffectState {
         avoidCount = value;
     }
 }
-
-
-
-
-
-

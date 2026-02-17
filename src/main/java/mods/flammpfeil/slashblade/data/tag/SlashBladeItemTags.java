@@ -15,9 +15,3 @@ public class SlashBladeItemTags {
     public static final TagKey<Item> CAN_CHANGE_SA = ItemTags.create(SlashBlade.prefix("can_change_sa"));
     public static final TagKey<Item> CAN_CHANGE_SE = ItemTags.create(SlashBlade.prefix("can_change_se"));
 }
-
-
-
-
-
-

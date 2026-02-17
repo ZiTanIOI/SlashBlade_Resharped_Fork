@@ -71,9 +71,3 @@ public class PMD_Material implements StructType {
      */
 
 }
-
-
-
-
-
-

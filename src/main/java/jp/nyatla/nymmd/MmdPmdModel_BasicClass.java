@@ -62,22 +62,22 @@ class DataComparator implements Comparator<PmdIK> {
 }
 
 /**
- * PmdModelデータの格納クラス。PmdModelに関わるデータを提供します�?抽象関数 getResourceProviderを実装してください�?
+ * PmdModelデータの格納クラス。PmdModelに関わるデータを提供します。 抽象関数 getResourceProviderを実装してください。
  */
 public abstract class MmdPmdModel_BasicClass {
     private String _name; // モデル名
-    private int _number_of_vertex; // 頂点�?
+    private int _number_of_vertex; // 頂点数
 
     private PmdFace[] m_pFaceArray; // 表情配列
-    private PmdBone[] m_pBoneArray; // ボーン配�?
+    private PmdBone[] m_pBoneArray; // ボーン配列
     private Map<String, PmdBone> boneMap = Maps.newHashMap();
     private PmdIK[] m_pIKArray; // IK配列
 
     private MmdVector3[] _position_array; // 座標配列
     private MmdVector3[] _normal_array; // 法線配列
-    private MmdTexUV[] _texture_uv; // テクスチャ座標配�?
+    private MmdTexUV[] _texture_uv; // テクスチャ座標配列
     private PmdSkinInfo[] _skin_info_array;
-    private PmdMaterial[] _materials; // マテリアル配�?
+    private PmdMaterial[] _materials; // マテリアル配列
     private IResourceProvider _res_provider;
 
     public interface IResourceProvider {
@@ -156,7 +156,7 @@ public abstract class MmdPmdModel_BasicClass {
         this._name = pPMDHeader.szName;
 
         // -----------------------------------------------------
-        // 頂点数取�?
+        // 頂点数取得
         this._number_of_vertex = reader.readInt();//
         if (this._number_of_vertex < 0) {
             throw new MmdException();
@@ -181,14 +181,14 @@ public abstract class MmdPmdModel_BasicClass {
             this._skin_info_array[i].unBoneNo_1 = tmp_pmd_vertex.unBoneNo[1];
         }
         // -----------------------------------------------------
-        // 頂点インデックス数取�?
+        // 頂点インデックス数取得
         short[] indices_array = createIndicesArray(reader);
 
         // -----------------------------------------------------
         // マテリアル数取得
         int number_of_materials = reader.readInt();
 
-        // マテリアル配列をコピ�?
+        // マテリアル配列をコピー
         this._materials = new PmdMaterial[number_of_materials];
 
         PMD_Material tmp_pmd_material = new PMD_Material();
@@ -226,15 +226,15 @@ public abstract class MmdPmdModel_BasicClass {
 
         }
 
-        // Boneの読み出�?
+        // Boneの読み出し
         this.m_pBoneArray = createBoneArray(reader);
         boneMap.clear();
         Stream.of(this.m_pBoneArray).forEach(bone -> {
             this.boneMap.put(bone.getName(), bone);
         });
-        // IK配列の読み出�?
+        // IK配列の読み出し
         this.m_pIKArray = createIKArray(reader, this.m_pBoneArray);
-        // Face配列の読み出�?
+        // Face配列の読み出し
         this.m_pFaceArray = createFaceArray(reader);
 
         final PmdFace[] face_array = this.m_pFaceArray;
@@ -263,7 +263,7 @@ public abstract class MmdPmdModel_BasicClass {
         PmdBone[] result = new PmdBone[number_of_bone];
         for (int i = 0; i < number_of_bone; i++) {
             tmp_pmd_bone.read(i_reader);
-            // ボーンの親子関係を一緒に読みだすので�?
+            // ボーンの親子関係を一緒に読みだすので。
             result[i] = new PmdBone(tmp_pmd_bone, result);
         }
         for (int i = 0; i < number_of_bone; i++) {
@@ -276,7 +276,7 @@ public abstract class MmdPmdModel_BasicClass {
         final int number_of_ik = i_reader.readShort();
         PMD_IK tmp_pmd_ik = new PMD_IK();
         PmdIK[] result = new PmdIK[number_of_ik];
-        // IK配列を作�?
+        // IK配列を作成
         if (number_of_ik > 0) {
 
             for (int i = 0; i < number_of_ik; i++) {
@@ -293,7 +293,7 @@ public abstract class MmdPmdModel_BasicClass {
         PMD_FACE tmp_pmd_face = new PMD_FACE();
         PmdFace[] result = new PmdFace[number_of_face];
 
-        // 表情配列を作�?
+        // 表情配列を作成
         if (number_of_face > 0) {
 
             for (int i = 0; i < number_of_face; i++) {
@@ -313,9 +313,3 @@ public abstract class MmdPmdModel_BasicClass {
     }
 
 }
-
-
-
-
-
-

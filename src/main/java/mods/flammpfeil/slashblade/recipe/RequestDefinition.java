@@ -189,9 +189,3 @@ public record RequestDefinition(ResourceLocation name, int proudSoulCount, int k
         }
     }
 }
-
-
-
-
-
-

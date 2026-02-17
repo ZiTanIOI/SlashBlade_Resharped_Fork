@@ -21,7 +21,7 @@ public class TFMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        //判断是否有安装暮色森�?
+        //判断是否有安装暮色森林
         return LoadingModList.get().getModFileById("twilightforest") != null;
     }
 
@@ -45,9 +45,3 @@ public class TFMixinPlugin implements IMixinConfigPlugin {
     }
 
 }
-
-
-
-
-
-

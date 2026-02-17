@@ -47,9 +47,3 @@ public class MmdColor3 {
         return;
     }
 }
-
-
-
-
-
-

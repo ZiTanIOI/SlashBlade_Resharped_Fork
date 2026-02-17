@@ -43,9 +43,3 @@ public class NamedBladeStateCapabilityProvider implements ICapabilityProvider, I
         state.ifPresent(instance -> instance.deserializeNBT(inTag));
     }
 }
-
-
-
-
-
-

@@ -44,9 +44,3 @@ public class PatchouliMixinPlugin implements IMixinConfigPlugin {
     }
 
 }
-
-
-
-
-
-

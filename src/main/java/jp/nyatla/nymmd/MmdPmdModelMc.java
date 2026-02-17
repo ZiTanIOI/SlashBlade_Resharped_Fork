@@ -65,9 +65,3 @@ public class MmdPmdModelMc extends MmdPmdModel_BasicClass {
         }
     }
 }
-
-
-
-
-
-

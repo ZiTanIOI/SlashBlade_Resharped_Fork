@@ -62,9 +62,3 @@ public class PMD_Bone implements StructType {
         return;
     }
 }
-
-
-
-
-
-

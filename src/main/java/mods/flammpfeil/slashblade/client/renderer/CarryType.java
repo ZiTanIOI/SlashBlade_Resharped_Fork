@@ -8,9 +8,3 @@ public enum CarryType {
     public static final Codec<CarryType> CODEC = Codec.STRING.xmap(string -> CarryType.valueOf(string.toUpperCase()),
             instance -> instance.name().toLowerCase());
 }
-
-
-
-
-
-

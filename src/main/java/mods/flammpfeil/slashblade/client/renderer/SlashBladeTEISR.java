@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -34,8 +35,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.EnumSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SlashBladeTEISR extends BlockEntityWithoutLevelRenderer {
 
@@ -182,14 +181,9 @@ public class SlashBladeTEISR extends BlockEntityWithoutLevelRenderer {
             name = stateTag.getString("ModelName");
         }
         if (!(stack.getItem() instanceof ItemSlashBladeDetune)) {
-            String key = null;
-            if (stateTag != null) {
-                key = stateTag.getString("translationKey");
-            }
-            if (key != null && !key.isBlank()) {
-                ResourceLocation bladeName =
-                        ResourceLocation.tryParse(key.substring(5).replaceFirst(Pattern.quote("\\."), Matcher.quoteReplacement(":")));
-                var registry = BladeModelManager.getClientSlashBladeRegistry();
+            ResourceLocation bladeName = getBladeNameFromState(stateTag);
+            if (bladeName != null) {
+                Registry<SlashBladeDefinition> registry = BladeModelManager.getClientSlashBladeRegistry();
                 if (registry != null) {
                     SlashBladeDefinition slashBladeDefinition = registry.get(bladeName);
                     if (slashBladeDefinition != null) {
@@ -216,14 +210,9 @@ public class SlashBladeTEISR extends BlockEntityWithoutLevelRenderer {
             name = stateTag.getString("TextureName");
         }
         if (!(stack.getItem() instanceof ItemSlashBladeDetune)) {
-            String key = null;
-            if (stateTag != null) {
-                key = stateTag.getString("translationKey");
-            }
-            if (key != null && !key.isBlank()) {
-                ResourceLocation bladeName =
-                        ResourceLocation.tryParse(key.substring(5).replaceFirst(Pattern.quote("."), Matcher.quoteReplacement(":")));
-                var registry = BladeModelManager.getClientSlashBladeRegistry();
+            ResourceLocation bladeName = getBladeNameFromState(stateTag);
+            if (bladeName != null) {
+                Registry<SlashBladeDefinition> registry = BladeModelManager.getClientSlashBladeRegistry();
                 if (registry != null) {
                     SlashBladeDefinition slashBladeDefinition = registry.get(bladeName);
                     if (slashBladeDefinition != null) {
@@ -237,6 +226,17 @@ public class SlashBladeTEISR extends BlockEntityWithoutLevelRenderer {
                     ? ResourceLocation.tryParse(name) : DefaultResources.resourceDefaultTexture;
         }
         return DefaultResources.resourceDefaultTexture;
+    }
+
+    private ResourceLocation getBladeNameFromState(CompoundTag stateTag) {
+        if (stateTag == null) {
+            return null;
+        }
+        String key = stateTag.getString("translationKey");
+        if (key == null || key.isBlank() || !key.startsWith("item.")) {
+            return null;
+        }
+        return ResourceLocation.tryParse(key.substring(5).replaceFirst("\\.", ":"));
     }
 
     public void renderModel(ItemStack stack, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn) {

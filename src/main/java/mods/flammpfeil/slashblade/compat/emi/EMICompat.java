@@ -34,7 +34,7 @@ public class EMICompat implements EmiPlugin {
         registry.addCategory(SLASHBLADE_SMITHING_CATEGORY);
         registry.addCategory(SLASHBLADE_SHAPED_CATEGORY);
 
-        // 注册SlashBlade锻造配�?
+        // 注册SlashBlade锻造配方
         HashSet<ResourceLocation> vanillaSmithing = new HashSet<>();
         List<SlashBladeSmithingRecipe> smithingRecipes = findRecipesByType(RecipeType.SMITHING).stream()
                 .filter(r -> r instanceof SlashBladeSmithingRecipe).map(r -> (SlashBladeSmithingRecipe) r).toList();
@@ -44,7 +44,7 @@ public class EMICompat implements EmiPlugin {
         }
         registry.removeRecipes(emiRecipe -> vanillaSmithing.contains(emiRecipe.getId()) && !(emiRecipe instanceof SlashBladeSmithingEmiRecipe));
 
-        // 添加工作�?
+        // 添加工作站
         registry.addWorkstation(SLASHBLADE_SMITHING_CATEGORY, EmiStack.of(Blocks.SMITHING_TABLE));
         registry.removeRecipes(ResourceLocation.tryParse("emi:/crafting/repairing/slashblade/slashblade"));
 
@@ -58,9 +58,3 @@ public class EMICompat implements EmiPlugin {
         return List.of();
     }
 }
-
-
-
-
-
-

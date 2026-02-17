@@ -144,9 +144,3 @@ public abstract class MixinItemEmiStackSerializer implements EmiStackSerializer<
         return EmiStack.EMPTY;
     }
 }
-
-
-
-
-
-

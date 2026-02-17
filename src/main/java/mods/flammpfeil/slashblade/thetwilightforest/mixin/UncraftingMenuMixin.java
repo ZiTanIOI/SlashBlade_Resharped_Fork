@@ -17,12 +17,12 @@ public class UncraftingMenuMixin {
             return;
         }
 
-        // 提前排除非拔刀剑类的情�?
+        // 提前排除非拔刀剑类的情况
         if (!(input.getItem() instanceof ItemSlashBlade) || !(output.getItem() instanceof ItemSlashBlade)) {
             return;
         }
 
-        // 获取刀状态（若缺失能力则直接抛出异常�?
+        // 获取刀状态（若缺失能力则直接抛出异常）
         var inputState = input.getCapability(ItemSlashBlade.BLADESTATE).orElseThrow(NullPointerException::new);
         var outputState = output.getCapability(ItemSlashBlade.BLADESTATE).orElseThrow(NullPointerException::new);
 
@@ -32,23 +32,17 @@ public class UncraftingMenuMixin {
             return;
         }
 
-        // 判断断刀状态是否一�?
+        // 判断断刀状态是否一致
         if (inputState.isBroken() != outputState.isBroken()) {
             cir.setReturnValue(false);
             return;
         }
 
-        // 判断附魔是否一�?
+        // 判断附魔是否一致
         if (!EnchantmentsHelper.hasEnchantmentsMatch(input, output)) {
             cir.setReturnValue(false);
         }
 
-        // 所有条件满足时不做更改保持原true返回�?
+        // 所有条件满足时不做更改保持原true返回值
     }
 }
-
-
-
-
-
-

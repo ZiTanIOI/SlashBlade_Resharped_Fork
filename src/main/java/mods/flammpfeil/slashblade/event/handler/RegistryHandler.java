@@ -11,7 +11,6 @@ import net.minecraftforge.registries.RegisterEvent;
 
 @Mod.EventBusSubscriber(bus = Bus.MOD)
 public class RegistryHandler {
-
     @SubscribeEvent
     public static void registerSerializers(RegisterEvent event) {
         event.register(ForgeRegistries.Keys.RECIPE_SERIALIZERS, helper -> CraftingHelper

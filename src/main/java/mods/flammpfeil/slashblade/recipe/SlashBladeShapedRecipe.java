@@ -1,10 +1,10 @@
 package mods.flammpfeil.slashblade.recipe;
 
 import mods.flammpfeil.slashblade.SlashBladeConfig;
+import mods.flammpfeil.slashblade.event.handler.SlashBladeRegistryHandler;
 import mods.flammpfeil.slashblade.item.ItemSlashBlade;
 import mods.flammpfeil.slashblade.registry.SlashBladeItems;
 import mods.flammpfeil.slashblade.registry.slashblade.SlashBladeDefinition;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -36,31 +36,7 @@ public class SlashBladeShapedRecipe extends ShapedRecipe {
         Item bladeItem = ForgeRegistries.ITEMS.containsKey(outputBlade) ? ForgeRegistries.ITEMS.getValue(outputBlade)
                 : SlashBladeItems.SLASHBLADE.get();
 
-        ItemStack result = Objects.requireNonNullElseGet(bladeItem, SlashBladeItems.SLASHBLADE).getDefaultInstance();
-        
-        // 初始化NBT标签
-        if (result.getItem() instanceof ItemSlashBlade) {
-            result.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(state -> {
-                // 设置正确的translationKey
-                String translationKey = "item." + outputBlade.getNamespace() + "." + outputBlade.getPath();
-                state.setTranslationKey(translationKey);
-                
-                // 设置模型和纹理
-                String modelName = "model/named/" + outputBlade.getPath() + ".obj";
-                String textureName = "model/named/" + outputBlade.getPath() + ".png";
-                state.setModel(mods.flammpfeil.slashblade.SlashBlade.prefix(modelName));
-                state.setTexture(mods.flammpfeil.slashblade.SlashBlade.prefix(textureName));
-                
-                // 设置其他默认属性
-                state.setBaseAttackModifier(5.0F);
-                state.setMaxDamage(60);
-                
-                // 保存状态到NBT
-                result.getOrCreateTag().put("bladeState", state.serializeNBT());
-            });
-        }
-        
-        return result;
+        return Objects.requireNonNullElseGet(bladeItem, SlashBladeItems.SLASHBLADE).getDefaultInstance();
     }
 
     public ResourceLocation getOutputBlade() {
@@ -71,9 +47,28 @@ public class SlashBladeShapedRecipe extends ShapedRecipe {
         return ResourceKey.create(SlashBladeDefinition.REGISTRY_KEY, outputBlade);
     }
 
+    private ItemStack resolveOutputBlade() {
+        ItemStack result = getResultBlade(this.getOutputBlade());
+        if (!Objects.equals(ForgeRegistries.ITEMS.getKey(result.getItem()), getOutputBlade())) {
+            SlashBladeDefinition definition = SlashBladeRegistryHandler.getCachedBladeDefinition(getOutputBladeKey());
+            if (definition != null) {
+                result = definition.getBlade();
+            } else {
+                result = new ItemStack(SlashBladeItems.SLASHBLADE.get());
+                final ItemStack finalResult = result;
+                finalResult.getCapability(ItemSlashBlade.BLADESTATE).ifPresent(state -> {
+                    state.setNonEmpty();
+                    state.setTranslationKey("item." + outputBlade.getNamespace() + "." + outputBlade.getPath());
+                    finalResult.getOrCreateTag().put("bladeState", state.serializeNBT());
+                });
+            }
+        }
+        return result;
+    }
+
     @Override
     public @NotNull ItemStack getResultItem() {
-        return SlashBladeShapedRecipe.getResultBlade(this.getOutputBlade());
+        return resolveOutputBlade();
     }
 
     @Override
@@ -127,7 +122,7 @@ public class SlashBladeShapedRecipe extends ShapedRecipe {
             if (canApplyFlag) {
                 for (Enchantment curEnchantIndex : newItemEnchants.keySet()) {
                     if (curEnchantIndex != enchantIndex
-                            && !enchantIndex.isCompatibleWith(curEnchantIndex) /* canApplyTogether */) {
+                            && !enchantIndex.isCompatibleWith(curEnchantIndex)) {
                         canApplyFlag = false;
                         break;
                     }
@@ -144,11 +139,4 @@ public class SlashBladeShapedRecipe extends ShapedRecipe {
     public @NotNull RecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
-
 }
-
-
-
-
-
-

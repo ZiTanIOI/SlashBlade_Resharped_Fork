@@ -1,7 +1,7 @@
 package mods.flammpfeil.slashblade.client.renderer.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import mods.flammpfeil.slashblade.client.renderer.layers.LayerMainBlade;
 import mods.flammpfeil.slashblade.client.renderer.util.MSAutoCloser;
 import mods.flammpfeil.slashblade.item.ItemSlashBlade;
@@ -67,23 +67,20 @@ public class BladeFirstPersonRender {
         }
 
         try (MSAutoCloser msac = MSAutoCloser.pushMatrix(matrixStack)) {
-            // 不要重置整个矩阵堆栈，只应用必要的变换
+            PoseStack.Pose me = matrixStack.last();
+            me.pose().setIdentity();
+            me.normal().setIdentity();
+
             matrixStack.translate(0.0f, 0.0f, -0.5f);
-            matrixStack.mulPose(new Quaternion(0, 0, 180.0f, true));
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0f));
             matrixStack.scale(1.2F, 1.0F, 1.0F);
 
             // no sync pitch
-            matrixStack.mulPose(new Quaternion(0, 0, -mc.player.getXRot(), true));
-
-            // layer.disableOffhandRendering();
-            float partialTicks = mc.getPartialTick();
-            layer.render(matrixStack, bufferIn, combinedLightIn, mc.player, 0, 0, partialTicks, 0, 0, 0);
+            if (mc.player != null) {
+                matrixStack.mulPose(Vector3f.XP.rotationDegrees(-mc.player.getXRot()));
+                float partialTicks = mc.getPartialTick();
+                layer.render(matrixStack, bufferIn, combinedLightIn, mc.player, 0, 0, partialTicks, 0, 0, 0);
+            }
         }
     }
 }
-
-
-
-
-
-

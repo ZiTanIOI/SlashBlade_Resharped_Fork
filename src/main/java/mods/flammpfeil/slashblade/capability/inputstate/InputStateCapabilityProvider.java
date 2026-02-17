@@ -43,9 +43,3 @@ public class InputStateCapabilityProvider implements ICapabilityProvider, INBTSe
         state.ifPresent(instance -> instance.getCommands().addAll(EnumSetConverter.convertToEnumSet(InputCommand.class, baseTag.getInt(KEY))));
     }
 }
-
-
-
-
-
-

@@ -109,9 +109,3 @@ public class SlashBladeSmithingEmiRecipe extends EMISimpleRecipe {
         return recipe;
     }
 }
-
-
-
-
-
-

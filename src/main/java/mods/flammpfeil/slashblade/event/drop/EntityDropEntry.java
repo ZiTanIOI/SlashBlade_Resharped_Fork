@@ -33,9 +33,3 @@ public record EntityDropEntry(ResourceLocation entityType, ResourceLocation blad
     }
 
 }
-
-
-
-
-
-

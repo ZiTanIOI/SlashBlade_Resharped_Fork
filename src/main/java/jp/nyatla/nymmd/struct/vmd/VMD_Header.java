@@ -58,9 +58,3 @@ public class VMD_Header implements StructType {
      * 対象モデル名
      */
 }
-
-
-
-
-
-

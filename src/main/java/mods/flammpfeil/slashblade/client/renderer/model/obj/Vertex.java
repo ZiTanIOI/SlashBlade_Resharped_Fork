@@ -13,9 +13,3 @@ public class Vertex {
         this.z = z;
     }
 }
-
-
-
-
-
-

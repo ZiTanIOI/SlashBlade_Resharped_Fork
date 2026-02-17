@@ -43,9 +43,3 @@ public class BladeChangeSpecialEffectEvent extends SlashBladeEvent {
         return originalEvent;
     }
 }
-
-
-
-
-
-

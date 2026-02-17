@@ -43,9 +43,3 @@ public interface StructType {
     public void read(DataReader i_reader) throws MmdException;
 
 }
-
-
-
-
-
-

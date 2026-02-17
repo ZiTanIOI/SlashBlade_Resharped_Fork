@@ -51,9 +51,3 @@ public class RankPointHandler {
                 .ifPresent(cr -> cr.addRankPoint(event.getSource()));
     }
 }
-
-
-
-
-
-

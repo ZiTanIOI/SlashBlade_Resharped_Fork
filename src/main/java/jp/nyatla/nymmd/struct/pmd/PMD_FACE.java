@@ -42,10 +42,10 @@ import jp.nyatla.nymmd.struct.DataReader;
 import jp.nyatla.nymmd.struct.StructType;
 
 public class PMD_FACE implements StructType {
-    public String szName; // 表情�?(0x00 終端，余白は 0xFD)
-    public int ulNumVertices; // 表情頂点�?
+    public String szName; // 表情名 (0x00 終端，余白は 0xFD)
+    public int ulNumVertices; // 表情頂点数
     public int cbType; // 分類
-    public PMD_FACE_VTX[] pVertices = PMD_FACE_VTX.createArray(64);// 表情頂点デー�?
+    public PMD_FACE_VTX[] pVertices = PMD_FACE_VTX.createArray(64);// 表情頂点データ
 
     public void read(DataReader i_reader) throws MmdException {
         int i;
@@ -53,7 +53,7 @@ public class PMD_FACE implements StructType {
         this.szName = i_reader.readAscii(20);
         this.ulNumVertices = i_reader.readInt();
         this.cbType = i_reader.read();
-        // 必要な数だけ配列を確保しなおす�?
+        // 必要な数だけ配列を確保しなおす。
         if (this.ulNumVertices > this.pVertices.length) {
             this.pVertices = PMD_FACE_VTX.createArray(this.ulNumVertices);
         }
@@ -63,16 +63,10 @@ public class PMD_FACE implements StructType {
         return;
     }
     /*
-     * char szName[20]; // 表情�?(0x00 終端，余白は 0xFD)
+     * char szName[20]; // 表情名 (0x00 終端，余白は 0xFD)
      * 
-     * unsigned long ulNumVertices; // 表情頂点�?unsigned char cbType; // 分類
+     * unsigned long ulNumVertices; // 表情頂点数 unsigned char cbType; // 分類
      * 
-     * PMD_FACE_VTX pVertices[1]; // 表情頂点デー�?
+     * PMD_FACE_VTX pVertices[1]; // 表情頂点データ
      */
 }
-
-
-
-
-
-

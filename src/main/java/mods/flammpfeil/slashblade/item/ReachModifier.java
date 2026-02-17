@@ -10,9 +10,3 @@ public class ReachModifier {
         return 2.5; // extend 1.0 block
     }
 }
-
-
-
-
-
-

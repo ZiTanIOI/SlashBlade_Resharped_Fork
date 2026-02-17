@@ -45,9 +45,3 @@ public class ModelResourceLoader implements PreparableReloadListener {
         return CompletableFuture.runAsync(() -> loadResources(resourceManager), backgroundExecutor).thenCompose(stage::wait);
     }
 }
-
-
-
-
-
-

@@ -65,9 +65,3 @@ public class PreCopySpecialEffectFromBladeEvent extends SlashBladeEvent {
         return isCopiable;
     }
 }
-
-
-
-
-
-

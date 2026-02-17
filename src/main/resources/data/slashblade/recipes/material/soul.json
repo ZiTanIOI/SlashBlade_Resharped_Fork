@@ -1,5 +1,5 @@
 {
-    "type": "minecraft:crafting_shapeless",
+    "type": "slashblade:proudsoul",
     "ingredients": [
         {
             "item": "slashblade:proudsoul_tiny"

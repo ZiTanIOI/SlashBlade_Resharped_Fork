@@ -54,9 +54,3 @@ public class RefineSettlementEvent extends SlashBladeEvent {
         return this.refineResult;
     }
 }
-
-
-
-
-
-

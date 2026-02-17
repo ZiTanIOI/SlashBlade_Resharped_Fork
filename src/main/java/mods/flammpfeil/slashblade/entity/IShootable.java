@@ -12,10 +12,3 @@ public interface IShootable {
 
     double getDamage();
 }
-
-
-
-
-
-
-

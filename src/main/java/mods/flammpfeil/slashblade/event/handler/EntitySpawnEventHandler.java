@@ -34,7 +34,7 @@ public class EntitySpawnEventHandler {
         float difficultyMultiplier = event.getDifficulty().getSpecialMultiplier();
 
         Registry<SlashBladeDefinition> bladeRegistry = SlashBlade
-                .getSlashBladeDefinitionRegistry(event.getEntity().getLevel());
+                .getSlashBladeDefinitionRegistry(event.getEntity().level());
         if (!bladeRegistry.containsKey(SlashBladeBuiltInRegistry.SABIGATANA.location())) {
             return;
         }
@@ -56,9 +56,3 @@ public class EntitySpawnEventHandler {
         return entity instanceof Zombie && !(entity instanceof Drowned) && !(entity instanceof ZombifiedPiglin);
     }
 }
-
-
-
-
-
-

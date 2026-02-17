@@ -75,9 +75,3 @@ public class SBItems {
     @Deprecated
     public static Item bladestand_2w = SlashBladeItems.BLADESTAND_2_W.get();
 }
-
-
-
-
-
-

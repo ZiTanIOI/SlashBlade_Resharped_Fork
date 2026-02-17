@@ -14,9 +14,3 @@ public class CapabilityConcentrationRank {
         event.register(IConcentrationRank.class);
     }
 }
-
-
-
-
-
-

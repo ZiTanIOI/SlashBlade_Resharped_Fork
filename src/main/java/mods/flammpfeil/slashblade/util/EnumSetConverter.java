@@ -21,9 +21,3 @@ public class EnumSetConverter {
         return Arrays.stream(values).skip(ordinal).findFirst().orElse(def);
     }
 }
-
-
-
-
-
-

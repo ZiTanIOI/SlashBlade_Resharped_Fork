@@ -119,9 +119,3 @@ public class SimpleBladeStateCapabilityProvider implements ICapabilityProvider, 
         });
     }
 }
-
-
-
-
-
-

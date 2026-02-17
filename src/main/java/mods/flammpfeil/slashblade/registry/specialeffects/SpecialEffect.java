@@ -78,9 +78,3 @@ public class SpecialEffect {
         return this.getOrCreateDescriptionId();
     }
 }
-
-
-
-
-
-

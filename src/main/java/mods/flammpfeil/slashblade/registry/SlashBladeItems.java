@@ -2,7 +2,6 @@ package mods.flammpfeil.slashblade.registry;
 
 import mods.flammpfeil.slashblade.SlashBlade;
 import mods.flammpfeil.slashblade.SlashBladeCreativeGroup;
-
 import mods.flammpfeil.slashblade.item.*;
 import mods.flammpfeil.slashblade.registry.specialeffects.SpecialEffect;
 import net.minecraft.ChatFormatting;
@@ -11,7 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -32,30 +30,33 @@ import static mods.flammpfeil.slashblade.SlashBladeConfig.TRAPEZOHEDRON_MAX_REFI
 
 public class SlashBladeItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SlashBlade.MODID);
+    private static Item.Properties props() {
+        return new Item.Properties().tab(SlashBladeCreativeGroup.TAB);
+    }
 
     public static final RegistryObject<Item> PROUDSOUL = ITEMS.register("proudsoul", () ->
-            new ItemProudSoul(new Item.Properties().tab(SlashBladeCreativeGroup.TAB)) {
+            new ItemProudSoul(props()) {
                 @Override
                 public int getEnchantmentValue(ItemStack stack) {
                     return 50;
                 }
             });
     public static final RegistryObject<Item> PROUDSOUL_INGOT = ITEMS.register("proudsoul_ingot", () ->
-            new ItemProudSoul((new Item.Properties().tab(SlashBladeCreativeGroup.TAB))) {
+            new ItemProudSoul(props()) {
                 @Override
                 public int getEnchantmentValue(ItemStack stack) {
                     return 100;
                 }
             });
     public static final RegistryObject<Item> PROUDSOUL_TINY = ITEMS.register("proudsoul_tiny", () ->
-            new ItemProudSoul((new Item.Properties().tab(SlashBladeCreativeGroup.TAB))) {
+            new ItemProudSoul(props()) {
                 @Override
                 public int getEnchantmentValue(ItemStack stack) {
                     return 10;
                 }
             });
     public static final RegistryObject<Item> PROUDSOUL_SPHERE = ITEMS.register("proudsoul_sphere", () ->
-            new ItemProudSoul((new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).rarity(Rarity.UNCOMMON)) {
+            new ItemProudSoul(props().rarity(Rarity.UNCOMMON)) {
                 @Override
                 public int getEnchantmentValue(ItemStack stack) {
                     return 150;
@@ -76,7 +77,7 @@ public class SlashBladeItems {
                 }
             });
     public static final RegistryObject<Item> PROUDSOUL_CRYSTAL = ITEMS.register("proudsoul_crystal", () ->
-            new ItemProudSoul((new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).rarity(Rarity.RARE)) {
+            new ItemProudSoul(props().rarity(Rarity.RARE)) {
                 @Override
                 public int getEnchantmentValue(ItemStack stack) {
                     return 200;
@@ -106,7 +107,7 @@ public class SlashBladeItems {
                 }
             });
     public static final RegistryObject<Item> PROUDSOUL_TRAPEZOHEDRON = ITEMS.register("proudsoul_trapezohedron", () ->
-            new ItemProudSoul((new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).rarity(Rarity.EPIC)) {
+            new ItemProudSoul(props().rarity(Rarity.EPIC)) {
                 @Override
                 public int getEnchantmentValue(ItemStack stack) {
                     return TRAPEZOHEDRON_MAX_REFINE.get();
@@ -114,40 +115,32 @@ public class SlashBladeItems {
             });
 
     public static final RegistryObject<Item> BLADESTAND_1 = ITEMS.register("bladestand_1", () ->
-            new BladeStandItem((new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).rarity(Rarity.COMMON)));
+            new BladeStandItem(props().rarity(Rarity.COMMON)));
     public static final RegistryObject<Item> BLADESTAND_2 = ITEMS.register("bladestand_2", () ->
-            new BladeStandItem((new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).rarity(Rarity.COMMON)));
+            new BladeStandItem(props().rarity(Rarity.COMMON)));
     public static final RegistryObject<Item> BLADESTAND_V = ITEMS.register("bladestand_v", () ->
-            new BladeStandItem((new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).rarity(Rarity.COMMON)));
+            new BladeStandItem(props().rarity(Rarity.COMMON)));
     public static final RegistryObject<Item> BLADESTAND_S = ITEMS.register("bladestand_s", () ->
-            new BladeStandItem((new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).rarity(Rarity.COMMON)));
+            new BladeStandItem(props().rarity(Rarity.COMMON)));
     public static final RegistryObject<Item> BLADESTAND_1_W = ITEMS.register("bladestand_1w", () ->
-            new BladeStandItem((new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).rarity(Rarity.COMMON),true));
+            new BladeStandItem(props().rarity(Rarity.COMMON),true));
     public static final RegistryObject<Item> BLADESTAND_2_W = ITEMS.register("bladestand_2w", () ->
-            new BladeStandItem((new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).rarity(Rarity.COMMON),true));
+            new BladeStandItem(props().rarity(Rarity.COMMON),true));
 
     public static final RegistryObject<Item> SLASHBLADE_WOOD = ITEMS.register("slashblade_wood", () ->
             new ItemSlashBladeDetune(new ItemTierSlashBlade(60, 2F), 2, 0.0F,
-                    new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).setDestructable()
+                    props()).setDestructable()
                     .setTexture(SlashBlade.prefix("model/wood.png")));
     public static final RegistryObject<Item> SLASHBLADE_BAMBOO = ITEMS.register("slashblade_bamboo", () ->
             new ItemSlashBladeDetune(new ItemTierSlashBlade(70, 3F), 3, 0.0F,
-                    new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).setDestructable()
+                    props()).setDestructable()
                     .setTexture(SlashBlade.prefix("model/bamboo.png")));
     public static final RegistryObject<Item> SLASHBLADE_SILVERBAMBOO = ITEMS.register("slashblade_silverbamboo", () ->
             new ItemSlashBladeDetune(new ItemTierSlashBlade(40, 3F), 3, 0.0F,
-                    new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).setTexture(SlashBlade.prefix("model/silverbamboo.png")));
+                    props()).setTexture(SlashBlade.prefix("model/silverbamboo.png")));
     public static final RegistryObject<Item> SLASHBLADE_WHITE = ITEMS.register("slashblade_white", () ->
             new ItemSlashBladeDetune(new ItemTierSlashBlade(70, 4F), 4, 0.0F,
-                    new Item.Properties().tab(SlashBladeCreativeGroup.TAB)).setTexture(SlashBlade.prefix("model/white.png")));
+                    props()).setTexture(SlashBlade.prefix("model/white.png")));
     public static final RegistryObject<Item> SLASHBLADE = ITEMS.register("slashblade", () ->
-            new ItemSlashBlade(new ItemTierSlashBlade(40, 4F), 4, 0.0F, new Item.Properties().tab(SlashBladeCreativeGroup.TAB)));
-
-    public static final RegistryObject<Item> BOOK_JOURNEY = ITEMS.register("book_journey", () -> new ItemSlashBladeBook(new Item.Properties().tab(SlashBladeCreativeGroup.TAB).stacksTo(1)));
+            new ItemSlashBlade(new ItemTierSlashBlade(40, 4F), 4, 0.0F, props()));
 }
-
-
-
-
-
-

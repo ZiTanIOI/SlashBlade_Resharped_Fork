@@ -7,7 +7,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'net.minecraftforge.gradle' version '6.0.47'
     id "com.hypherionmc.modutils.modpublisher" version "2.1.6"
 }
 
@@ -77,10 +77,11 @@ mixin {
     }
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 sourceSets {
     main {
         java {
-            // 排除需要可选依赖的兼容性文件，以及1.19.2不兼容的文件
+            // Optional integration sources are excluded for the 1.19.2 baseline port.
             exclude '**/compat/playerAnim/**'
             exclude '**/compat/emi/**'
             exclude '**/event/client/AdvancementsRecipeRenderer.java'
@@ -89,11 +90,7 @@ sourceSets {
             exclude '**/patchouli/**'
             exclude '**/thetwilightforest/**'
             exclude '**/mixin/client/compat/ar/**'
-            exclude '**/recipe/ProudsoulShapelessRecipe.java'
-            // exclude '**/SlashBladeCreativeGroup.java' // 不再排除，保留创造模式标签
             exclude '**/util/CustomDamageSource.java'
-            // 排除编码问题的jp.nyatla.nymmd包
-            exclude '**/jp/nyatla/nymmd/**'
         }
     }
 }
@@ -134,28 +131,29 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    //添加 Mixin 支持
+    //娣诲姞 Mixin 鏀寔
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     compileOnly           "org.projectlombok:lombok:1.18.38"
     annotationProcessor   "org.projectlombok:lombok:1.18.38"
-    
-    
-    
-    // 添加 JEI 依赖
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
-    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    
-    // 移除其他可选依赖
-    // runtimeOnly fg.deobf("curse.maven:configured-457570:5180900")
-    // runtimeOnly fg.deobf("curse.maven:nbtedit-reborn-678133:5984630")
-    // implementation fg.deobf("curse.maven:the-twilight-forest-227639:5468648")
-    // implementation fg.deobf("curse.maven:emi-580555:6098494")
-    // compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
-    // runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
-    // compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77-FORGE")
-    // runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77-FORGE")
+
+    // Use local JEI API jars to keep migration builds stable without external downloads.
+    compileOnly files('libs/jei-1.19.2-common-api-11.6.0.1016.jar')
+    compileOnly files('libs/jei-1.19.2-forge-api-11.6.0.1016.jar')
+
+
+    //鍋囦汉(鍚墠缃?
+    // compile against the JEI API but do not include it at runtime
+    // at runtime, use the full JEI jar for Forge
+    //Configured
+
+    //绁炲寲
+
+    //鍙茶瘲鎴樻枟
+
+    //鏆壊妫灄
+
+
 }
 
 tasks.named('processResources', ProcessResources).configure {
@@ -197,7 +195,7 @@ tasks.named('jar', Jar).configure {
 // }
 
 java {
-    // 编译源码文件，方便发布 maven
+    // 缂栬瘧婧愮爜鏂囦欢锛屾柟渚垮彂甯?maven
     withSourcesJar()
 }
 
@@ -299,3 +297,4 @@ publisher {
     }
 
 }
+

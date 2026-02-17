@@ -19,9 +19,3 @@ public interface DefaultResources {
     ResourceLocation resourceDurabilityTexture = new ResourceLocation("slashblade",
             "model/util/durability.png");
 }
-
-
-
-
-
-

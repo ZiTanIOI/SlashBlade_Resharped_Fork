@@ -14,9 +14,3 @@ public class CapabilityInputState {
         event.register(IInputState.class);
     }
 }
-
-
-
-
-
-

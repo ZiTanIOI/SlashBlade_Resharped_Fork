@@ -46,9 +46,3 @@ public class InputCommandEvent extends Event {
         return event;
     }
 }
-
-
-
-
-
-

@@ -85,9 +85,3 @@ public class BladeModel implements BakedModel {
      * cameraTransformType, mat); }
      */
 }
-
-
-
-
-
-

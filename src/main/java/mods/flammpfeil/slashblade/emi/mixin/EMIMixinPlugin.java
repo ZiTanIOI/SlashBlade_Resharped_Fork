@@ -44,9 +44,3 @@ public class EMIMixinPlugin implements IMixinConfigPlugin {
     }
 
 }
-
-
-
-
-
-

@@ -15,9 +15,3 @@ public class PreloadedModelEvent {
         event.registerReloadListener(new ModelResourceLoader());
     }
 }
-
-
-
-
-
-

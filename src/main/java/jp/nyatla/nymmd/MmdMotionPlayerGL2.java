@@ -38,14 +38,14 @@ public class MmdMotionPlayerGL2 extends MmdMotionPlayer {
     public void setPmd(MmdPmdModel_BasicClass i_pmd_model) throws MmdException {
         super.setPmd(i_pmd_model);
 
-        // 確保済みリソースのリセッ�?
-        // OpenGLResourceの生�?
+        // 確保済みリソースのリセット
+        // OpenGLResourceの生成
         final int number_of_vertex = i_pmd_model.getNumberOfVertex();
         this._fbuf = new float[number_of_vertex * 3 * 2];
 
         MmdPmdModel_BasicClass.IResourceProvider tp = i_pmd_model.getResourceProvider();
 
-        // Material配列の作�?
+        // Material配列の作成
         PmdMaterial[] m = i_pmd_model.getMaterials();// this._ref_materials;
         Vector<Material> materials = new Vector<Material>();
         for (int i = 0; i < m.length; i++) {
@@ -88,7 +88,7 @@ public class MmdMotionPlayerGL2 extends MmdMotionPlayer {
     }
 
     /**
-     * この関数はupdateMotionがskinning_matを更新するを呼び出します�?
+     * この関数はupdateMotionがskinning_matを更新するを呼び出します。
      */
     @Override
     protected void onUpdateSkinningMatrix(MmdMatrix[] i_skinning_mat) throws MmdException {
@@ -158,7 +158,7 @@ public class MmdMotionPlayerGL2 extends MmdMotionPlayer {
                         .normal(_fbuf[npos++], _fbuf[npos++], _fbuf[npos++]).color(1, 1, 1, 1).endVertex();
             }
 
-            // マテリアル設�?
+            // マテリアル設定
             /**/
             GL11.glEnable(GL11.GL_COLOR_MATERIAL);
             GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT_AND_DIFFUSE);
@@ -179,7 +179,7 @@ public class MmdMotionPlayerGL2 extends MmdMotionPlayer {
              * GL11.GL_SHININESS, 0);//mt_ptr.fShininess); /
              **/
 
-            // カリング判定：何となくうまくいったか�?
+            // カリング判定：何となくうまくいったから
             if ((0x100 & mt_ptr.unknown) == 0x100) {
                 GL11.glDisable(GL11.GL_CULL_FACE);
             } else {
@@ -195,10 +195,10 @@ public class MmdMotionPlayerGL2 extends MmdMotionPlayer {
             /*
              * if (mt_ptr.texture_id!=0) { // テクスチャありならBindする
              * GL11.glEnable(GL11.GL_TEXTURE_2D); GL11.glBindTexture(GL11.GL_TEXTURE_2D,
-             * mt_ptr.texture_id); } else { // テクスチャな�?GL11.glDisable(GL11.GL_TEXTURE_2D); }
+             * mt_ptr.texture_id); } else { // テクスチャなし GL11.glDisable(GL11.GL_TEXTURE_2D); }
              */
 
-            // 頂点インデックスを指定してポリゴン描�?
+            // 頂点インデックスを指定してポリゴン描画
             // GL11.glDrawElements(GL11.GL_TRIANGLES, mt_ptr.indices);
 
             Tesselator.getInstance().end();
@@ -216,9 +216,3 @@ public class MmdMotionPlayerGL2 extends MmdMotionPlayer {
         return fb;
     }
 }
-
-
-
-
-
-

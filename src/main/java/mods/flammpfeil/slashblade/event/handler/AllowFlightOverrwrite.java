@@ -26,9 +26,3 @@ public class AllowFlightOverrwrite {
         event.getServer().setFlightAllowed(true);
     }
 }
-
-
-
-
-
-

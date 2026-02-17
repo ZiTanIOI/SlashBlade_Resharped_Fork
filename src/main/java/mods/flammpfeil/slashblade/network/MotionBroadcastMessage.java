@@ -75,9 +75,3 @@ public class MotionBroadcastMessage {
         MinecraftForge.EVENT_BUS.post(new BladeMotionEvent(target, state));
     }
 }
-
-
-
-
-
-

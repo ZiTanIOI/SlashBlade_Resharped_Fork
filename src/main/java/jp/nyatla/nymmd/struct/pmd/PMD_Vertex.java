@@ -47,16 +47,16 @@ import jp.nyatla.nymmd.types.MmdVector3;
 public class PMD_Vertex implements StructType {
     public MmdVector3 vec3Pos = new MmdVector3(); // 座標
     public MmdVector3 vec3Normal = new MmdVector3(); // 法線ベクトル
-    public MmdTexUV uvTex = new MmdTexUV(); // テクスチャ座�?
+    public MmdTexUV uvTex = new MmdTexUV(); // テクスチャ座標
 
-    public int[] unBoneNo = new int[2]; // ボーン番�?
-    public int cbWeight; // ブレンドの重�?(0�?00�?
+    public int[] unBoneNo = new int[2]; // ボーン番号
+    public int cbWeight; // ブレンドの重み (0～100％)
     public int cbEdge; // エッジフラグ
     /*
-     * Vector3 vec3Pos; // 座標 Vector3 vec3Normal; // 法線ベクトル TexUV uvTex; // テクスチャ座�?
+     * Vector3 vec3Pos; // 座標 Vector3 vec3Normal; // 法線ベクトル TexUV uvTex; // テクスチャ座標
      * 
-     * unsigned short unBoneNo[2]; // ボーン番�?unsigned char cbWeight; // ブレンドの重�?
-     * (0�?00�? unsigned char cbEdge; // エッジフラグ
+     * unsigned short unBoneNo[2]; // ボーン番号 unsigned char cbWeight; // ブレンドの重み
+     * (0～100％) unsigned char cbEdge; // エッジフラグ
      */
 
     public void read(DataReader i_reader) throws MmdException {
@@ -71,9 +71,3 @@ public class PMD_Vertex implements StructType {
     }
 
 }
-
-
-
-
-
-

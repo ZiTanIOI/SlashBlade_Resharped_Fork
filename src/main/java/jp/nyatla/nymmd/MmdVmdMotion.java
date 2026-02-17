@@ -50,9 +50,3 @@ public class MmdVmdMotion extends MmdVmdMotion_BasicClass {
         super(i_stream);
     }
 }
-
-
-
-
-
-

@@ -13,9 +13,3 @@ public enum InputCommand {
         return a.stream().anyMatch(b::contains);
     }
 }
-
-
-
-
-
-

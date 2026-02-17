@@ -26,7 +26,15 @@ public class VectorHelper {
     }
 
     static public Matrix4f matrix4fFromArray(float[] in) {
-        return new Matrix4f(in);
+        // MMD/JOML style array is effectively column-major for m00..m33 order.
+        // com.mojang.math.Matrix4f(float[]) expects row-major m00,m01,...,m33.
+        // Convert by transposing index layout to preserve transform semantics.
+        return new Matrix4f(new float[]{
+                in[0], in[4], in[8], in[12],
+                in[1], in[5], in[9], in[13],
+                in[2], in[6], in[10], in[14],
+                in[3], in[7], in[11], in[15]
+        });
     }
 }
 

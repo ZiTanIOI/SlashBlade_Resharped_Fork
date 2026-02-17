@@ -60,13 +60,7 @@ public class PMD_Header implements StructType {
         return;
     }
     /*
-     * char szMagic[3]; // "Pmd" float fVersion; // PMDバージョン番�?char szName[20]; //
-     * モデル名 char szComment[256]; // コメント(著作権表示な�?
+     * char szMagic[3]; // "Pmd" float fVersion; // PMDバージョン番号 char szName[20]; //
+     * モデル名 char szComment[256]; // コメント(著作権表示など)
      */
 }
-
-
-
-
-
-

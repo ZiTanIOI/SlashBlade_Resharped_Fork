@@ -70,9 +70,3 @@ public enum SwordType {
         return new CompoundTag();
     }
 }
-
-
-
-
-
-

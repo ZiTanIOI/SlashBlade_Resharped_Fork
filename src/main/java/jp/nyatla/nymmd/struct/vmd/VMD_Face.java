@@ -55,9 +55,3 @@ public class VMD_Face implements StructType {
     }
 
 }
-
-
-
-
-
-

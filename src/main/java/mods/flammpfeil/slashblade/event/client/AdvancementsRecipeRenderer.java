@@ -8,8 +8,7 @@ import mods.flammpfeil.slashblade.SlashBlade;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.client.Minecraft;
-// �?.19.2中，GuiGraphics不存在，使用旧的渲染方式
-// import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.advancements.AdvancementTab;
@@ -308,7 +307,7 @@ public class AdvancementsRecipeRenderer implements PlaceRecipe<Ingredient> {
         if (Objects.equals(loc, currentRecipe)) {
             return;
         }
-        currentRecipe = loc;//减少性能消�?
+        currentRecipe = loc;//减少性能消耗
         Optional<? extends Recipe<?>> recipe = Optional.empty();
         if (MCINSTANCE.level != null) {
             recipe = MCINSTANCE.level.getRecipeManager().byKey(loc);
@@ -509,9 +508,3 @@ public class AdvancementsRecipeRenderer implements PlaceRecipe<Ingredient> {
         }
     }
 }
-
-
-
-
-
-

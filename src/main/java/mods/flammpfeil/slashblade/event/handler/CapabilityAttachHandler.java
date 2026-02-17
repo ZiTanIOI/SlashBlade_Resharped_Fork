@@ -28,9 +28,3 @@ public class CapabilityAttachHandler {
     }
 
 }
-
-
-
-
-
-

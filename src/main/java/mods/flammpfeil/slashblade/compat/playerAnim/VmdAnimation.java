@@ -17,8 +17,9 @@ import mods.flammpfeil.slashblade.util.TimeValueHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaterniond;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 
 import java.io.IOException;
 import java.util.List;
@@ -178,20 +179,18 @@ public class VmdAnimation implements IAnimation {
                     return new Vec3f(tmp.x, tmp.y, tmp.z);
                 }
                 case ROTATION: {
-                    Vector3f tmp = QuaternionToEulerZYX(
-                            bone.m_vec4Rotate.x,
-                            bone.m_vec4Rotate.y,
-                            bone.m_vec4Rotate.z,
+                    Quaterniond qt = new Quaterniond(bone.m_vec4Rotate.x, bone.m_vec4Rotate.y, bone.m_vec4Rotate.z,
                             bone.m_vec4Rotate.w);
+                    Vector3d tmp = QuaternionToEulerZYX(qt);
 
                     if ("body".equals(modelName)) {
-                        tmp.mul(1, -1, -1);
+                        tmp = tmp.mul(1, -1, -1);
                     } else {
-                        tmp.mul(-1, 1, -1);
+                        tmp = tmp.mul(-1, 1, -1);
                     }
 
                     tmp.add(blend);
-                    return new Vec3f(tmp.x(), tmp.y(), tmp.z());
+                    return new Vec3f((float) tmp.x, (float) tmp.y, (float) tmp.z);
                 }
                 default:
                     break;
@@ -227,33 +226,57 @@ public class VmdAnimation implements IAnimation {
         return value0;
     }
 
-    Vector3f QuaternionToEulerZYX(float x, float y, float z, float w) {
-        Vector3f tmp = new Vector3f();
+    Vector3d QuaternionToEulerZYX(Quaterniond qt) {
+        Vector3d tmp = new Vector3d();
 
-        // 1. 计算旋转矩阵元素
-        double xx = x * x;
-        double yy = y * y;
-        double zz = z * z;
-        double xy = x * y;
-        double xz = x * z;
-        double yz = y * z;
-        double wx = w * x;
-        double wy = w * y;
-        double wz = w * z;
+        // 1. 归一化四元数
+        Quaterniond normalizedQt = qt.normalize();
 
-        // 旋转矩阵 R 的元素 (ZYX顺序)
+        // 2. 计算旋转矩阵元素(修正后的公式)
+        double wx = normalizedQt.w * normalizedQt.x;
+        double wy = normalizedQt.w * normalizedQt.y;
+        double wz = normalizedQt.w * normalizedQt.z;
+        double xx = normalizedQt.x * normalizedQt.x;
+        double xy = normalizedQt.x * normalizedQt.y;
+        double xz = normalizedQt.x * normalizedQt.z;
+        double yy = normalizedQt.y * normalizedQt.y;
+        double yz = normalizedQt.y * normalizedQt.z;
+        double zz = normalizedQt.z * normalizedQt.z;
+
+        // 旋转矩阵 R 的元素(ZYX顺序)
         double m00 = 1.0 - 2.0 * (yy + zz);
         double m01 = 2.0 * (xy + wz);
         double m02 = 2.0 * (xz - wy);
         double m12 = 2.0 * (yz + wx);
         double m22 = 1.0 - 2.0 * (xx + yy);
 
-        // 2. 计算欧拉角 (Z-Y-X顺序)
-        tmp.z = (float) Math.atan2(m01, m00);
-        tmp.y = (float) Math.asin(-m02);  // 确保参数在-1~1之间
-        tmp.x = (float) Math.atan2(m12, m22);
+        // 3. 计算欧拉角(Z-Y-X顺序)
+        tmp.z = Math.atan2(m01, m00);
+        tmp.y = Math.asin(-m02);  // 确保参数在-1~1内
+        tmp.x = Math.atan2(m12, m22);
 
         return tmp;
+        
+/*        Vector3d tmp = new Vector3d();
+
+        double a_x_x = Math.pow(qt.w, 2) + Math.pow(qt.x, 2) - Math.pow(qt.y, 2) - Math.pow(qt.z, 2);
+        double a_x_y = 2 * (qt.x * qt.y + qt.w * qt.z);
+        double a_x_z = 2 * (qt.x * qt.z - qt.w * qt.y);
+
+//        double a_y_x = 2 * (qt.x * qt.y - qt.w * qt.z);
+//        double a_y_y = Math.pow(qt.w, 2) - Math.pow(qt.x, 2) + Math.pow(qt.y, 2) - Math.pow(qt.z, 2);
+        double a_y_z = 2 * (qt.y * qt.z + qt.w * qt.x);
+
+//        double a_z_x = 2 * (qt.x * qt.z + qt.w * qt.y);
+//        double a_z_y = 2 * (qt.y * qt.z - qt.w * qt.x);
+        double a_z_z = Math.pow(qt.w, 2) - Math.pow(qt.x, 2) - Math.pow(qt.y, 2) + Math.pow(qt.z, 2);
+
+        // Quaternion to Euler zyx
+        tmp.z = Math.atan2(a_x_y, a_x_x);
+        tmp.y = Math.asin(-a_x_z);
+        tmp.x = Math.atan2(a_y_z, a_z_z);
+
+        return tmp;*/
     }
 
     @Override
@@ -284,9 +307,3 @@ public class VmdAnimation implements IAnimation {
         }
     }
 }
-
-
-
-
-
-

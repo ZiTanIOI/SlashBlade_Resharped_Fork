@@ -47,9 +47,3 @@ public class ComboCommands {
         DEAFULT_STANDBY.put(EnumSet.of(InputCommand.ON_AIR), ComboStateRegistry.AERIAL_RAVE_A1.getId());
     }
 }
-
-
-
-
-
-

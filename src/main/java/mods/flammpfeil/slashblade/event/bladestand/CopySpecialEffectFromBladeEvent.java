@@ -58,9 +58,3 @@ public class CopySpecialEffectFromBladeEvent extends SlashBladeEvent {
         return itemEntity;
     }
 }
-
-
-
-
-
-

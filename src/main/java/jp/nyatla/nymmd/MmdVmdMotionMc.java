@@ -53,9 +53,3 @@ public class MmdVmdMotionMc extends MmdVmdMotion_BasicClass {
         super(getStream(loc));
     }
 }
-
-
-
-
-
-

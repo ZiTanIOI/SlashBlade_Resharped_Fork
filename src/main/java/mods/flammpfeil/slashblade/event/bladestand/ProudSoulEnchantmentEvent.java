@@ -78,9 +78,3 @@ public class ProudSoulEnchantmentEvent extends SlashBladeEvent {
         return originalEvent;
     }
 }
-
-
-
-
-
-

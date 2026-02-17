@@ -78,7 +78,6 @@ public class KickJump {
             return;
         }
 
-        // 保存当前疾跑状�?
         boolean wasSprinting = sender.isSprinting();
 
         // execute
@@ -92,14 +91,12 @@ public class KickJump {
 
         sender.move(MoverType.SELF, motion);
 
-        //疾跑时保持水平动量，非疾跑时保持原缩�?
         Vec3 adjustedMotion = wasSprinting
-                ? new Vec3(motion.x, motion.y * 0.75f, motion.z) // 只缩放垂直分�?
-                : motion.scale(0.75f);                           // 整体缩放
+                ? new Vec3(motion.x, motion.y * 0.75f, motion.z)
+                : motion.scale(0.75f);
 
         sender.connection.send(new ClientboundSetEntityMotionPacket(sender.getId(), adjustedMotion));
 
-        //强制恢复疾跑状�?
         if (wasSprinting) {
             sender.setSprinting(true);
         }

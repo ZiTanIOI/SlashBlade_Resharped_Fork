@@ -49,7 +49,7 @@ public class VMD_Motion implements StructType {
     public long ulFrameNo; // フレーム番号
 
     public final MmdVector3 vec3Position = new MmdVector3();// 位置
-    public final MmdVector4 vec4Rotate = new MmdVector4(); // 回転(クォータニオ�?
+    public final MmdVector4 vec4Rotate = new MmdVector4(); // 回転(クォータニオン)
 
     public final int[] cInterpolation1 = new int[16]; // 補間情報
     public final int[] cInterpolation2 = new int[16];
@@ -83,15 +83,9 @@ public class VMD_Motion implements StructType {
      * 
      * unsigned long ulFrameNo; // フレーム番号
      * 
-     * Vector3 vec3Position; // 位置 Vector4 vec4Rotate; // 回転(クォータニオ�?
+     * Vector3 vec3Position; // 位置 Vector4 vec4Rotate; // 回転(クォータニオン)
      * 
      * char cInterpolation1[16]; // 補間情報 char cInterpolation2[16]; char
      * cInterpolation3[16]; char cInterpolation4[16];
      */
 }
-
-
-
-
-
-

@@ -3,6 +3,7 @@ package mods.flammpfeil.slashblade.data.builtin;
 import mods.flammpfeil.slashblade.SlashBlade;
 import mods.flammpfeil.slashblade.client.renderer.CarryType;
 import mods.flammpfeil.slashblade.event.SlashBladeRegistryEvent;
+import mods.flammpfeil.slashblade.event.handler.SlashBladeRegistryHandler;
 import mods.flammpfeil.slashblade.item.SwordType;
 import mods.flammpfeil.slashblade.registry.SlashArtsRegistry;
 import mods.flammpfeil.slashblade.registry.SpecialEffectsRegistry;
@@ -53,8 +54,8 @@ public class SlashBladeBuiltInRegistry {
     public static final ResourceLocation KOSEKI = SlashBlade.prefix("koseki");
 
     public static void registerAll() {
-        // 1.19.2版本中，我们需要手动注册所有拔刀剑定义
-        // 这里使用与原版mod相同的注册逻辑
+        // 1.19.2鐗堟湰涓紝鎴戜滑闇€瑕佹墜鍔ㄦ敞鍐屾墍鏈夋嫈鍒€鍓戝畾涔?
+        // 杩欓噷浣跨敤涓庡師鐗坢od鐩稿悓鐨勬敞鍐岄€昏緫
         registerBladeDefinition(KOSEKI,
                 new SlashBladeDefinition(SlashBlade.prefix("koseki"),
                         RenderDefinition.Builder
@@ -318,8 +319,10 @@ public class SlashBladeBuiltInRegistry {
     }
 
     private static void registerBladeDefinition(ResourceLocation key, SlashBladeDefinition definition) {
-        // 在1.19.2版本中，我们通过SlashBladeRegistryEvent来注册拔刀剑定义
-        // 这里使用事件机制来确保拔刀剑定义被正确注册
+        SlashBladeRegistryHandler.cacheBladeDefinition(
+                net.minecraft.resources.ResourceKey.create(SlashBladeDefinition.REGISTRY_KEY, key),
+                definition
+        );
         MinecraftForge.EVENT_BUS.post(new SlashBladeRegistryEvent.Register(key, definition));
     }
 

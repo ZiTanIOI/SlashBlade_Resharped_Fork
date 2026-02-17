@@ -25,9 +25,3 @@ public class StatHelper {
         return newValue;
     }
 }
-
-
-
-
-
-
